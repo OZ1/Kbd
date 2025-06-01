@@ -21,7 +21,7 @@
     <ClCompile Include="KbdLat.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KbdLat.cpp">
+    <ClCompile Include="MyKbdLat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

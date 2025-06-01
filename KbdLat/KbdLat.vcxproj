@@ -39,7 +39,7 @@
     <ClCompile Include="KbdLat.C">
       <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="KbdLat.cpp">
+    <ClCompile Include="MyKbdLat.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)'=='MSKLC'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
