@@ -219,70 +219,71 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch2[] = {
 //	               │     │Shift│ Control │AltGr│
 //	               ╞═════╪═════╪═════════╪═════╡
 	{VK_SPACE   , 0,  ' ', ' ' ,   ' '   , L' '},
+	{VK_DECIMAL , 0,  ',', '.' , WCH_NONE, L'…',},
 	{VK_MULTIPLY, 0, L'×', '*' , WCH_NONE, L'⋅'},
-	{VK_DIVIDE  , 0,  '÷', '/' , WCH_NONE, L'∕'},
 	{0}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch3[] = {
-//	               │    │Shift│ Control │AltGr│ ↑AltGr↑ │
-//	               ╞════╪═════╪═════════╪═════╪═════════╡
-	{VK_ADD     , 0, '+', '+' , WCH_NONE, L'±', L'∓'    },
-	{VK_SUBTRACT, 0, '−',  '-', WCH_NONE, L'–', L'—'    },
+//	               │     │Shift│ Control │AltGr│ ↑AltGr↑ │
+//	               ╞═════╪═════╪═════════╪═════╪═════════╡
+	{VK_ADD     , 0,  '+', '+' , WCH_NONE, L'±', L'∓'    },
+	{VK_SUBTRACT, 0, L'−', '-' , WCH_NONE, L'–', L'—'    },
+	{VK_DIVIDE  , 0, L'÷', '/' , WCH_NONE, L'∕', L'⁄'    },
 	{0}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
-//	                      |     |Shift|   Ctrl  |AltGr|   ↑AltGr↑   │                   │     │Shift│
-//	                      |=====|=====|=========|=====|=============╡                   |=====╪═════╡
-	{'1'          , SGCAPS,  '!',  '[', WCH_NONE, L'́'    , WCH_DEAD}, {VK__none_    , 0, '1' ,  '!', WCH_NONE, WCH_NONE, L'ᵢ'},
-	{'2'          , SGCAPS, L'«',  ']', WCH_NONE, L'̏'    , '\"'	}, {'2'          , 0, '2' ,  '@'},
-	{'3'          , SGCAPS, L'»', L'№', WCH_NONE, L'̄'    , L'§'	}, {'3'          , 0, '3' ,  '#'},
-	{'4'          , SGCAPS, L'₽', L'€', WCH_NONE,  '$'    , L'¥'	}, {'4'          , 0, '4' ,  '$'},
-	{'5'          , SGCAPS,  '%', L'‰', WCH_NONE, WCH_DEAD, L'½'	}, {VK__none_    , 0, '5' ,  '%', WCH_NONE, L'°', WCH_NONE},
-	{'6'          , SGCAPS, L'ѣ', L'Ѣ', WCH_NONE, L'̂'    , L'⅔'	}, {'6'          , 0, '6' ,  '^'},
-	{'7'          , SGCAPS,  '?',  '{', WCH_NONE,  '&'    , L'¾'	}, {'7'          , 0, '7' ,  '&'},
-	{'8'          , SGCAPS, L'×',  '}', WCH_NONE, L'∞'    , L'∏'	}, {'8'          , 0, '8' ,  '*'},
-	{'9'          , SGCAPS,  '(',  '<', WCH_NONE, L'҃'    , L'≤'	}, {'9'          , 0, '9' ,  '('},
-	{'0'          , SGCAPS,  ')',  '>', WCH_NONE, L'҂'    , L'≥'	}, {'0'          , 0, '0' ,  ')'},
-	{VK_OEM_MINUS , SGCAPS,  '-', L'−', WCH_NONE, L'­'     , L'—'	}, {VK_OEM_MINUS , 0, '-' ,  '_'},
-	{VK_OEM_PLUS  , 0     ,  '=', L'≠', WCH_NONE, L'≈'    , L'≡'	}, {VK_OEM_PLUS  , 0, '=' ,  '+'},
-	{'Q'          , SGCAPS, L'й', L'Й', WCH_NONE, L'ј'    , L'Ј'	}, {'Q'          , 0, 'q' ,  'Q'},
-	{'W'          , SGCAPS, L'ц', L'Ц', WCH_NONE, L'џ'    , L'Џ'	}, {'W'          , 0, 'w' ,  'W'},
-	{'E'          , SGCAPS, L'у', L'У', WCH_NONE, L'ѫ'    , L'Ѫ'	}, {'E'          , 0, 'e' ,  'E'},
-	{'R'          , SGCAPS, L'к', L'К', WCH_NONE, L'ќ'    , L'Ќ'	}, {'R'          , 0, 'r' ,  'R'},
-	{'T'          , SGCAPS, L'е', L'Е', WCH_NONE, L'ѣ'    , L'Ѣ'	}, {'T'          , 0, 't' ,  'T'},
-	{'Y'          , SGCAPS, L'н', L'Н', WCH_NONE, L'њ'    , L'Њ'	}, {'Y'          , 0, 'y' ,  'Y'},
-	{'U'          , SGCAPS, L'г', L'Г', WCH_NONE, L'ѓ'    , L'Ѓ'	}, {'U'          , 0, 'u' ,  'U'},
-	{'I'          , SGCAPS, L'ш', L'Ш', WCH_NONE, L'ї'    , L'Ї'	}, {'I'          , 0, 'i' ,  'I'},
-	{'O'          , SGCAPS, L'щ', L'Щ', WCH_NONE, L'ѹ'    , L'Ѹ'	}, {'O'          , 0, 'o' ,  'O'},
-	{'P'          , SGCAPS, L'з', L'З', WCH_NONE, L'ꙁ'    , L'Ꙁ'	}, {'P'          , 0, 'p' ,  'P'},
-	{VK_OEM_4     , SGCAPS, L'х', L'Х', WCH_NONE, L'ꙗ'    , L'Ꙗ'	}, {VK_OEM_4     , 0, '[' ,  '{'},
-	{VK_OEM_6     , SGCAPS, L'ъ', L'Ъ', WCH_NONE, L'ѩ'    , L'Ѩ'	}, {VK_OEM_6     , 0, ']' ,  '}'},
-	{'A'          , SGCAPS, L'ф', L'Ф', WCH_NONE, L'ѳ'    , L'Ѳ'	}, {'A'          , 0, 'a' ,  'A'},
-	{'S'          , SGCAPS, L'ы', L'Ы', WCH_NONE, L'ѕ'    , L'Ѕ'	}, {'S'          , 0, 's' ,  'S'},
-	{'D'          , SGCAPS, L'в', L'В', WCH_NONE, L'ћ'    , L'Ћ'	}, {'D'          , 0, 'd' ,  'D'},
-	{'F'          , SGCAPS, L'а', L'А', WCH_NONE, L'ѧ'    , L'Ѧ'	}, {'F'          , 0, 'f' ,  'F'},
-	{'G'          , SGCAPS, L'п', L'П', WCH_NONE, L'ѱ'    , L'Ѱ'	}, {'G'          , 0, 'g' ,  'G'},
-	{'H'          , SGCAPS, L'р', L'Р', WCH_NONE, L'ѡ'    , L'Ѡ'	}, {'H'          , 0, 'h' ,  'H'},
-	{'J'          , SGCAPS, L'о', L'О', WCH_NONE, L'ꙋ'    , L'Ꙋ'	}, {'J'          , 0, 'j' ,  'J'},
-	{'K'          , SGCAPS, L'л', L'Л', WCH_NONE, L'љ'    , L'Љ'	}, {'K'          , 0, 'k' ,  'K'},
-	{'L'          , SGCAPS, L'д', L'Д', WCH_NONE, L'ѕ'    , L'Ѕ'	}, {'L'          , 0, 'l' ,  'L'},
-	{VK_OEM_1     , SGCAPS, L'ж', L'Ж', WCH_NONE, L'ꙃ'    , L'Ꙃ'	}, {VK_OEM_1     , 0, ';' ,  ':'},
-	{VK_OEM_7     , SGCAPS, L'э', L'Э', WCH_NONE, L'є'    , L'Є'	}, {VK_OEM_7     , 0,'\'' , '\"'},
-	{VK_OEM_3     , SGCAPS, L'ё', L'Ё', WCH_NONE, L'̀'    , L'³'	}, {VK_OEM_3     , 0, '`' ,  '~'},
-	{VK_OEM_5     , SGCAPS, '\\',  '/', WCH_NONE, L'ѥ'    , L'Ѥ'	}, {VK_OEM_5     , 0,'\\' ,  '|'},
-	{'Z'          , SGCAPS, L'я', L'Я', WCH_NONE, L'ђ'    , L'Ђ'	}, {'Z'          , 0, 'z' ,  'Z'},
-	{'X'          , SGCAPS, L'ч', L'Ч', WCH_NONE, L'ѯ'    , L'Ѯ'	}, {'X'          , 0, 'x' ,  'X'},
-	{'C'          , SGCAPS, L'с', L'С', WCH_NONE, L'ҁ'    , L'Ҁ'	}, {'C'          , 0, 'c' ,  'C'},
-	{'V'          , SGCAPS, L'м', L'М', WCH_NONE, L'ў'    , L'Ў'	}, {'V'          , 0, 'v' ,  'V'},
-	{'B'          , SGCAPS, L'и', L'И', WCH_NONE, L'і'    , L'І'	}, {'B'          , 0, 'd' ,  'D'},
-	{'N'          , SGCAPS, L'т', L'Т', WCH_NONE, L'ѿ'    , L'Ѿ'	}, {'N'          , 0, 'n' ,  'N'},
-	{'M'          , SGCAPS, L'ь', L'Ь', WCH_NONE, L'ѵ'    , L'Ѵ'	}, {'M'          , 0, 'm' ,  'M'},
-	{VK_OEM_COMMA , SGCAPS, L'б', L'Б', WCH_NONE, L'ѫ'    , L'Ѫ'	}, {VK_OEM_COMMA , 0, ',' ,  '<'},
-	{VK_OEM_PERIOD, SGCAPS, L'ю', L'Ю', WCH_NONE, L'ѭ'    , L'Ѭ'	}, {VK_OEM_PERIOD, 0, '.' ,  '>'},
-	{VK_OEM_2     , SGCAPS,  '.',  ',', WCH_NONE,  ':'    ,  ';'	}, {VK_OEM_2     , 0, '/' ,  '?'},
-	{VK_OEM_102   , 0     , '\\',  '/', WCH_FS  , L'ꙉ'    , L'Ꙉ'	}, {VK_OEM_102   , 0,'\\' ,  '|'},
+//	                                    |     |Shift|   Ctrl  |  AltGr  |  ↑AltGr↑  │               │     │Shift│
+//	                                    |=====|=====|=========|=========|===========╡               |=====╪═════╡
+	{'1'          , SGCAPS              ,  '!',  '[', WCH_NONE, L'́'    , WCH_DEAD	}, {VK__none_, 0, '1' ,  '!', WCH_NONE, WCH_NONE, L'ᵢ'},
+	{'2'          , SGCAPS              , L'«',  ']', WCH_NONE, L'̏'    , '\"'  	}, {VK__none_, 0, '2' ,  '@'},
+	{'3'          , SGCAPS              , L'»', L'№', WCH_NONE, L'̄'    , L'§'  	}, {VK__none_, 0, '3' ,  '#'},
+	{'4'          , SGCAPS              , L'₽', L'€', WCH_NONE,  '$'    , L'¥'  	}, {VK__none_, 0, '4' ,  '$'},
+	{'5'          , SGCAPS              ,  '%', L'‰', WCH_NONE, WCH_DEAD, L'½'  	}, {VK__none_, 0, '5' ,  '%', WCH_NONE, L'°', WCH_NONE},
+	{'6'          , SGCAPS              , L'ѣ', L'Ѣ', WCH_NONE, L'̂'    , L'⅔'  	}, {VK__none_, 0, '6' ,  '^'},
+	{'7'          , SGCAPS              ,  '?',  '{', WCH_NONE,  '&'    , L'¾'  	}, {VK__none_, 0, '7' ,  '&'},
+	{'8'          , SGCAPS              , L'×',  '}', WCH_NONE, L'∞'    , L'∏'  	}, {VK__none_, 0, '8' ,  '*'},
+	{'9'          , SGCAPS              ,  '(',  '<', WCH_NONE, L'҃'    , L'≤'  	}, {VK__none_, 0, '9' ,  '('},
+	{'0'          , SGCAPS              ,  ')',  '>', WCH_NONE, L'҂'    , L'≥'  	}, {VK__none_, 0, '0' ,  ')'},
+	{VK_OEM_MINUS , SGCAPS              ,  '-', L'−', WCH_NONE, L'­'     , L'—'  	}, {VK__none_, 0, '-' ,  '_'},
+	{VK_OEM_PLUS  , SGCAPS              ,  '=', L'≠', WCH_NONE, L'≈'    , L'≡'  	}, {VK__none_, 0, '=' ,  '+'},
+	{'Q'          , SGCAPS | CAPLOKALTGR, L'й', L'Й', WCH_NONE, L'ј'    , L'Ј'  	}, {VK__none_, 0, 'q' ,  'Q'},
+	{'W'          , SGCAPS | CAPLOKALTGR, L'ц', L'Ц', WCH_NONE, L'џ'    , L'Џ'  	}, {VK__none_, 0, 'w' ,  'W'},
+	{'E'          , SGCAPS | CAPLOKALTGR, L'у', L'У', WCH_NONE, L'ѫ'    , L'Ѫ'  	}, {VK__none_, 0, 'e' ,  'E'},
+	{'R'          , SGCAPS | CAPLOKALTGR, L'к', L'К', WCH_NONE, L'ќ'    , L'Ќ'  	}, {VK__none_, 0, 'r' ,  'R'},
+	{'T'          , SGCAPS | CAPLOKALTGR, L'е', L'Е', WCH_NONE, L'ѣ'    , L'Ѣ'  	}, {VK__none_, 0, 't' ,  'T'},
+	{'Y'          , SGCAPS | CAPLOKALTGR, L'н', L'Н', WCH_NONE, L'њ'    , L'Њ'  	}, {VK__none_, 0, 'y' ,  'Y'},
+	{'U'          , SGCAPS | CAPLOKALTGR, L'г', L'Г', WCH_NONE, L'ѓ'    , L'Ѓ'  	}, {VK__none_, 0, 'u' ,  'U'},
+	{'I'          , SGCAPS | CAPLOKALTGR, L'ш', L'Ш', WCH_NONE, L'ї'    , L'Ї'  	}, {VK__none_, 0, 'i' ,  'I'},
+	{'O'          , SGCAPS | CAPLOKALTGR, L'щ', L'Щ', WCH_NONE, L'ѹ'    , L'Ѹ'  	}, {VK__none_, 0, 'o' ,  'O'},
+	{'P'          , SGCAPS | CAPLOKALTGR, L'з', L'З', WCH_NONE, L'ꙁ'    , L'Ꙁ'  	}, {VK__none_, 0, 'p' ,  'P'},
+	{VK_OEM_4     , SGCAPS | CAPLOKALTGR, L'х', L'Х', WCH_NONE, L'ꙗ'    , L'Ꙗ'  	}, {VK__none_, 0, '[' ,  '{'},
+	{VK_OEM_6     , SGCAPS | CAPLOKALTGR, L'ъ', L'Ъ', WCH_NONE, L'ѩ'    , L'Ѩ'  	}, {VK__none_, 0, ']' ,  '}'},
+	{'A'          , SGCAPS | CAPLOKALTGR, L'ф', L'Ф', WCH_NONE, L'ѳ'    , L'Ѳ'  	}, {VK__none_, 0, 'a' ,  'A'},
+	{'S'          , SGCAPS | CAPLOKALTGR, L'ы', L'Ы', WCH_NONE, L'ѕ'    , L'Ѕ'  	}, {VK__none_, 0, 's' ,  'S'},
+	{'D'          , SGCAPS | CAPLOKALTGR, L'в', L'В', WCH_NONE, L'ћ'    , L'Ћ'  	}, {VK__none_, 0, 'd' ,  'D'},
+	{'F'          , SGCAPS | CAPLOKALTGR, L'а', L'А', WCH_NONE, L'ѧ'    , L'Ѧ'  	}, {VK__none_, 0, 'f' ,  'F'},
+	{'G'          , SGCAPS | CAPLOKALTGR, L'п', L'П', WCH_NONE, L'ѱ'    , L'Ѱ'  	}, {VK__none_, 0, 'g' ,  'G'},
+	{'H'          , SGCAPS | CAPLOKALTGR, L'р', L'Р', WCH_NONE, L'ѡ'    , L'Ѡ'  	}, {VK__none_, 0, 'h' ,  'H'},
+	{'J'          , SGCAPS | CAPLOKALTGR, L'о', L'О', WCH_NONE, L'ꙋ'    , L'Ꙋ'  	}, {VK__none_, 0, 'j' ,  'J'},
+	{'K'          , SGCAPS | CAPLOKALTGR, L'л', L'Л', WCH_NONE, L'љ'    , L'Љ'  	}, {VK__none_, 0, 'k' ,  'K'},
+	{'L'          , SGCAPS | CAPLOKALTGR, L'д', L'Д', WCH_NONE, L'ѕ'    , L'Ѕ'  	}, {VK__none_, 0, 'l' ,  'L'},
+	{VK_OEM_1     , SGCAPS | CAPLOKALTGR, L'ж', L'Ж', WCH_NONE, L'ꙃ'    , L'Ꙃ'  	}, {VK__none_, 0, ';' ,  ':'},
+	{VK_OEM_7     , SGCAPS | CAPLOKALTGR, L'э', L'Э', WCH_NONE, L'є'    , L'Є'  	}, {VK__none_, 0,'\'' , '\"'},
+	{VK_OEM_3     , SGCAPS              , L'ё', L'Ё', WCH_NONE, L'̀'    , L'³'  	}, {VK__none_, 0, '`' ,  '~'},
+	{VK_OEM_5     , SGCAPS | CAPLOKALTGR, '\\',  '/', WCH_NONE, L'ѥ'    , L'Ѥ'  	}, {VK__none_, 0,'\\' ,  '|'},
+	{'Z'          , SGCAPS | CAPLOKALTGR, L'я', L'Я', WCH_NONE, L'ђ'    , L'Ђ'  	}, {VK__none_, 0, 'z' ,  'Z'},
+	{'X'          , SGCAPS | CAPLOKALTGR, L'ч', L'Ч', WCH_NONE, L'ѯ'    , L'Ѯ'  	}, {VK__none_, 0, 'x' ,  'X'},
+	{'C'          , SGCAPS | CAPLOKALTGR, L'с', L'С', WCH_NONE, L'ҁ'    , L'Ҁ'  	}, {VK__none_, 0, 'c' ,  'C'},
+	{'V'          , SGCAPS | CAPLOKALTGR, L'м', L'М', WCH_NONE, L'ў'    , L'Ў'  	}, {VK__none_, 0, 'v' ,  'V'},
+	{'B'          , SGCAPS | CAPLOKALTGR, L'и', L'И', WCH_NONE, L'і'    , L'І'  	}, {VK__none_, 0, 'd' ,  'D'},
+	{'N'          , SGCAPS | CAPLOKALTGR, L'т', L'Т', WCH_NONE, L'ѿ'    , L'Ѿ'  	}, {VK__none_, 0, 'n' ,  'N'},
+	{'M'          , SGCAPS | CAPLOKALTGR, L'ь', L'Ь', WCH_NONE, L'ѵ'    , L'Ѵ'  	}, {VK__none_, 0, 'm' ,  'M'},
+	{VK_OEM_COMMA , SGCAPS | CAPLOKALTGR, L'б', L'Б', WCH_NONE, L'ѭ'    , L'Ѭ'  	}, {VK__none_, 0, ',' ,  '<'},
+	{VK_OEM_PERIOD, SGCAPS | CAPLOKALTGR, L'ю', L'Ю', WCH_NONE, L'ѫ'    , L'Ѫ'  	}, {VK__none_, 0, '.' ,  '>'},
+	{VK_OEM_2     , SGCAPS              ,  '.',  ',', WCH_NONE,  ':'    ,  ';'  	}, {VK__none_, 0, '/' ,  '?'},
+	{VK_OEM_102   , SGCAPS | CAPLOKALTGR, '\\',  '/', WCH_FS  , L'ꙉ'    , L'Ꙉ'  	}, {VK__none_, 0,'\\' ,  '|'},
 	{0}
 };
 
@@ -305,13 +306,6 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch5[] = {
 	{0}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch6[] = {
-//	              │    │Shift│ Control │AltGr│S + AltGr│
-//	              ╞════╪═════╪═════════╪═════╪═════════╡
-	{VK_DECIMAL, 0, ',', '.' , WCH_NONE, L'…', L'…'    },
-	{0}
-};
-
 static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch0),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch1),
@@ -319,7 +313,6 @@ static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch3),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch4),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch5),
-	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch6),
 	NULL
 };
 
@@ -415,11 +408,6 @@ static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNamesExt[] = {
 static ALLOC_SECTION_LDATA DEADKEY_LPWSTR aKeyNamesDead[] = {
 	L"°Sup",
 	L"ᵢSub",
-	L"⅟1/",
-	L"⅔2/",
-	L"⅕/5",
-	L"⅙/6",
-	L"⅛/8",
 	NULL
 };
 
