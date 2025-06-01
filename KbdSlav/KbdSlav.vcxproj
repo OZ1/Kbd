@@ -134,7 +134,7 @@
     <Link>
       <ModuleDefinitionFile>My$(ProjectName).def</ModuleDefinitionFile>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.bss=.data /MERGE:.textbss=.data /MERGE:.pdata=.data</AdditionalOptions>
+      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.textbss=.data /MERGE:.bss=.data /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.pdata=.data</AdditionalOptions>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN=1;VER_INTERNALNAME_STR="\"$(ProjectName)\"";VER_ORIGINALFILENAME_STR="\"$(TargetFileName)\"";%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -54,11 +54,8 @@
     </None>
     <None Include="MyKbdLat.def">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MSKLC|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MSKLC|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MSKLC|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +134,7 @@
     <Link>
       <ModuleDefinitionFile>My$(ProjectName).def</ModuleDefinitionFile>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.bss=.data /MERGE:.textbss=.data /MERGE:.pdata=.data</AdditionalOptions>
+      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.textbss=.data /MERGE:.bss=.data /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.pdata=.data</AdditionalOptions>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN=1;VER_INTERNALNAME_STR="\"$(ProjectName)\"";VER_ORIGINALFILENAME_STR="\"$(TargetFileName)\"";%(PreprocessorDefinitions)</PreprocessorDefinitions>
