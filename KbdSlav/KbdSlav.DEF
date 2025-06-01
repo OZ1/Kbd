@@ -1,0 +1,4 @@
+LIBRARY KbdSlav
+ 
+ EXPORTS 
+    KbdLayerDescriptor @1

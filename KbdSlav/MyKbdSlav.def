@@ -1,0 +1,6 @@
+EXPORTS
+	KbdLayerDescriptor    @1 NONAME
+	KbdNlsLayerDescriptor @2 NONAME
+;	KbdRealLayoutFileNT4  @3 NONAME
+;	KbdRealLayoutFile     @4 NONAME
+;	KbdMultiLayout        @6 NONAME

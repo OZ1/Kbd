@@ -1,0 +1,4 @@
+LIBRARY KbdLat
+ 
+ EXPORTS 
+    KbdLayerDescriptor @1
