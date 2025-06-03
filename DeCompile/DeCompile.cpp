@@ -614,7 +614,7 @@ static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
 					case '\0'    : wprintf_s(L", 0        "); continue;
 					case '\\'    : wprintf_s(L", '\\\\'     "); continue;
 					case '\"'    : wprintf_s(L", '\\\"'     "); continue;
-					case '\''    : wprintf_s(L",  '\\''    "); continue;
+					case '\''    : wprintf_s(L", '\\''     "); continue;
 					case '\b'    : wprintf_s(L",  '\\b'    "); continue;
 					case '\t'    : wprintf_s(L",  '\\t'    "); continue;
 					case '\r'    : wprintf_s(L",  '\\r'    "); continue;
@@ -786,7 +786,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 	case NLSKBD_OEM_MICROSOFT:
 		if (KbdTables->dwType == KEYBOARD_TYPE_KOREA)
 		{
-			switch (KbdNlsTables->LayoutInformation)
+			switch (KbdTables->dwSubType)
 			{
 			case MICROSOFT_KBD_101A_TYPE: _putws(L"\tMICROSOFT_KBD_101A_TYPE,"); break;
 			case MICROSOFT_KBD_101B_TYPE: _putws(L"\tMICROSOFT_KBD_101B_TYPE,"); break;
@@ -794,7 +794,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 			case MICROSOFT_KBD_103_TYPE : _putws(L"\tMICROSOFT_KBD_103_TYPE,"); break;
 			default: wprintf_s(L"\t%u\n", KbdTables->dwSubType);
 			}
-		} else switch (KbdNlsTables->LayoutInformation)
+		} else switch (KbdTables->dwSubType)
 		{
 		case MICROSOFT_KBD_101_TYPE: _putws(L"\tMICROSOFT_KBD_101_TYPE,"); break;
 		case MICROSOFT_KBD_AX_TYPE : _putws(L"\tMICROSOFT_KBD_AX_TYPE,"); break;
@@ -806,7 +806,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 		}
 		break;
 	case NLSKBD_OEM_AX:
-		switch (KbdNlsTables->LayoutInformation)
+		switch (KbdTables->dwSubType)
 		{
 		case AX_KBD_DESKTOP_TYPE:
 		case MICROSOFT_KBD_101_TYPE : _putws(L"\tMICROSOFT_KBD_101_TYPE,"); break;
@@ -814,7 +814,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 		}
 		break;
 	case NLSKBD_OEM_FUJITSU:
-		switch (KbdNlsTables->LayoutInformation)
+		switch (KbdTables->dwSubType)
 		{
 		case FMR_KBD_JIS_TYPE  : _putws(L"\tFMR_KBD_JIS_TYPE,"); break;
 		case FMR_KBD_OASYS_TYPE: _putws(L"\tFMR_KBD_OASYS_TYPE,"); break;
@@ -823,7 +823,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 		}
 		break;
 	case NLSKBD_OEM_NEC:
-		switch (KbdNlsTables->LayoutInformation)
+		switch (KbdTables->dwSubType)
 		{
 		case NEC_KBD_NORMAL_TYPE: _putws(L"\tNEC_KBD_NORMAL_TYPE,"); break;
 		case NEC_KBD_N_MODE_TYPE: _putws(L"\tNEC_KBD_N_MODE_TYPE,"); break;
@@ -834,7 +834,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 		}
 		break;
 	case NLSKBD_OEM_TOSHIBA:
-		switch (KbdNlsTables->LayoutInformation)
+		switch (KbdTables->dwSubType)
 		{
 		case TOSHIBA_KBD_DESKTOP_TYPE: _putws(L"\tTOSHIBA_KBD_DESKTOP_TYPE,"); break;
 		case TOSHIBA_KBD_LAPTOP_TYPE : _putws(L"\tTOSHIBA_KBD_LAPTOP_TYPE,"); break;
@@ -842,7 +842,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 		}
 		break;
 	case NLSKBD_OEM_DEC:
-		switch (KbdNlsTables->LayoutInformation)
+		switch (KbdTables->dwSubType)
 		{
 		case DEC_KBD_ANSI_LAYOUT_TYPE: _putws(L"\tDEC_KBD_ANSI_LAYOUT_TYPE,"); break;
 		case DEC_KBD_JIS_LAYOUT_TYPE : _putws(L"\tDEC_KBD_JIS_LAYOUT_TYPE,"); break;
