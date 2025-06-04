@@ -8,9 +8,30 @@
 
 #define VK_POWER 0x5E
 
-#define WCH_ESC '\x1B'
-#define WCH_FS  '\x1C'
-#define WCH_GS  '\x1D'
+#define WCH_SOH '\1' // Start of heading
+#define WCH_STX '\2' // Start of text
+#define WCH_ETX '\3' // End   of text
+#define WCH_EOT '\4' // End   of transmission
+#define WCH_ENQ '\5' // Enquiry
+#define WCH_ACK '\6' // Acknowledgement
+#define WCH_SO  '\xE' // Shift out	«Переключиться на другую ленту (кодировку)»
+#define WCH_SI  '\xF' // Shift in	«Переключиться на исходную ленту (кодировку)»
+#define WCH_DLE '\x10' // Data link escape	«Экранирование канала данных»
+#define WCH_DC1 '\x11' // Device control 1
+#define WCH_DC2 '\x12' // Device control 2
+#define WCH_DC3 '\x13' // Device control 3
+#define WCH_DC4 '\x14' // Device control 4
+#define WCH_NAK '\x15' // Negative acknowledgement
+#define WCH_SYN '\x16' // Synchronous idle
+#define WCH_ETB '\x17' // End of transmission block
+#define WCH_CAN '\x18' // Cancel
+#define WCH_EOM '\x19' // End of medium
+#define WCH_SUB '\x1A' // Substitute
+#define WCH_ESC '\x1B' // Escape
+#define WCH_FS  '\x1C' // File   separator
+#define WCH_GS  '\x1D' // Group  separator
+#define WCH_RS  '\x1E' // Record separator
+#define WCH_US  '\x1F' // Unit   separator
 #define WCH_DEL '\x7F'
 
 #define VK_TO_WCHAR_TABLE_ENTRY(aVkToWchI) \
@@ -67,44 +88,44 @@ static ALLOC_SECTION_LDATA USHORT ausVK[] = {
 };
 
 static ALLOC_SECTION_LDATA VSC_VK aE0VscToVk[] = {
-	0x10, X10 | KBDEXT,  // Speedracer: Previous Track
-	0x19, X19 | KBDEXT,  // Speedracer: Next Track
-	0x1C, X1C | KBDEXT,  // Numpad Enter
-	0x1D, X1D | KBDEXT,  // RControl
-	0x20, X20 | KBDEXT,  // Speedracer: Volume Mute
-	0x21, X21 | KBDEXT,  // Speedracer: Launch App 2
-	0x22, X22 | KBDEXT,  // Speedracer: Media Play/Pause
-	0x24, X24 | KBDEXT,  // Speedracer: Media Stop
-	0x2E, X2E | KBDEXT,  // Speedracer: Volume Down
-	0x30, X30 | KBDEXT,  // Speedracer: Volume Up
-	0x32, X32 | KBDEXT,  // Speedracer: Browser Home
-	0x35, X35 | KBDEXT,  // Numpad Divide
-	0x37, X37 | KBDEXT,  // Snapshot
-	0x38, X38 | KBDEXT,  // RMenu
-	0x46, X46 | KBDEXT,  // Break (Ctrl + Pause)
-	0x47, X47 | KBDEXT,  // Home
-	0x48, X48 | KBDEXT,  // Up
-	0x49, X49 | KBDEXT,  // Prior
-	0x4B, X4B | KBDEXT,  // Left
-	0x4D, X4D | KBDEXT,  // Right
-	0x4F, X4F | KBDEXT,  // End
-	0x50, X50 | KBDEXT,  // Down
-	0x51, X51 | KBDEXT,  // Next
-	0x52, X52 | KBDEXT,  // Insert
-	0x53, X53 | KBDEXT,  // Delete
-	0x5B, X5B | KBDEXT,  // Left Win
-	0x5C, X5C | KBDEXT,  // Right Win
-	0x5D, X5D | KBDEXT,  // Application
-	0x5F, X5F | KBDEXT,  // Speedracer: Sleep
-	0x65, X65 | KBDEXT,  // Speedracer: Browser Search
-	0x66, X66 | KBDEXT,  // Speedracer: Browser Favorites
-	0x67, X67 | KBDEXT,  // Speedracer: Browser Refresh
-	0x68, X68 | KBDEXT,  // Speedracer: Browser Stop
-	0x69, X69 | KBDEXT,  // Speedracer: Browser Forward
-	0x6A, X6A | KBDEXT,  // Speedracer: Browser Back
-	0x6B, X6B | KBDEXT,  // Speedracer: Launch App 1
-	0x6C, X6C | KBDEXT,  // Speedracer: Launch Mail
-	0x6D, X6D | KBDEXT,  // Speedracer: Launch Media Selector
+	0x10, KBDEXT | X10     , // Speedracer: Previous Track
+	0x19, KBDEXT | X19     , // Speedracer: Next Track
+	0x1C, KBDEXT | X1C     , // Numpad Enter
+	0x1D, KBDEXT | X1D     , // RControl
+	0x20, KBDEXT | X20     , // Speedracer: Volume Mute
+	0x21, KBDEXT | X21     , // Speedracer: Launch App 2
+	0x22, KBDEXT | X22     , // Speedracer: Media Play/Pause
+	0x24, KBDEXT | X24     , // Speedracer: Media Stop
+	0x2E, KBDEXT | X2E     , // Speedracer: Volume Down
+	0x30, KBDEXT | X30     , // Speedracer: Volume Up
+	0x32, KBDEXT | X32     , // Speedracer: Browser Home
+	0x35, KBDEXT | X35     , // Numpad Divide
+	0x37, KBDEXT | X37     , // Snapshot
+	0x38, KBDEXT | VK_OEM_8, // Kana
+	0x46, KBDEXT | X46     , // Break (Ctrl + Pause)
+	0x47, KBDEXT | X47     , // Home
+	0x48, KBDEXT | X48     , // Up
+	0x49, KBDEXT | X49     , // Prior
+	0x4B, KBDEXT | X4B     , // Left
+	0x4D, KBDEXT | X4D     , // Right
+	0x4F, KBDEXT | X4F     , // End
+	0x50, KBDEXT | X50     , // Down
+	0x51, KBDEXT | X51     , // Next
+	0x52, KBDEXT | X52     , // Insert
+	0x53, KBDEXT | X53     , // Delete
+	0x5B, KBDEXT | X5B     , // Left Win
+	0x5C, KBDEXT | X5C     , // Right Win
+	0x5D, KBDEXT | X5D     , // Application
+	0x5F, KBDEXT | X5F     , // Speedracer: Sleep
+	0x65, KBDEXT | X65     , // Speedracer: Browser Search
+	0x66, KBDEXT | X66     , // Speedracer: Browser Favorites
+	0x67, KBDEXT | X67     , // Speedracer: Browser Refresh
+	0x68, KBDEXT | X68     , // Speedracer: Browser Stop
+	0x69, KBDEXT | X69     , // Speedracer: Browser Forward
+	0x6A, KBDEXT | X6A     , // Speedracer: Browser Back
+	0x6B, KBDEXT | X6B     , // Speedracer: Launch App 1
+	0x6C, KBDEXT | X6C     , // Speedracer: Launch Mail
+	0x6D, KBDEXT | X6D     , // Speedracer: Launch Media Selector
 	0
 };
 
@@ -126,7 +147,7 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 	VK_SHIFT,       KBDSHIFT,
 	VK_CONTROL,     KBDCTRL,
 	VK_MENU,        KBDALT,
-//	VK_KANA,        KBDKANA,
+	VK_OEM_8,       KBDKANA,
 //	VK_OEM_FJ_ROYA, KBDROYA,
 //	VK_OEM_FJ_LOYA, KBDLOYA,
 	0
@@ -138,15 +159,15 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 \***************************************************************************/
 static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
 	&aVkToBits[0],
-	7,
+	9,
 	{
 	//  /*      */ Modification# Shift         // Keys Pressed
 	//  /* ════ */ ════════════, ════════════, /* ════════════════════ */
 		/*      */ 0           , 1           , /*        	           */
 		/*      */ 2           , SHFT_INVALID, /* Control	           */
 		/*      */ SHFT_INVALID, SHFT_INVALID, /* Alt    	           */
-		/*      */ 3           , 4           , /* AltGr  	           */
-	//	/* Kana */ 5           , 6           , /*        	           */
+		/*      */ SHFT_INVALID, SHFT_INVALID, /* AltGr  	           */
+		/* Kana */ 3           , 4           , /*        	           */
 	//	/* Kana */ SHFT_INVALID, SHFT_INVALID, /* Control	           */
 	//	/* Kana */ SHFT_INVALID, SHFT_INVALID, /* Alt    	           */
 	//	/* Kana */ SHFT_INVALID, SHFT_INVALID, /* AltGr  	           */
@@ -219,72 +240,72 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch1[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch2[] = {
-//	               │    │Shift│ Control │AltGr│
+//	               │    │Shift│ Control │ Kana│
 //	               ╞════╪═════╪═════════╪═════╡
 	{VK_DECIMAL , 0, '.', ',' , WCH_NONE, L'…'},
 	{0}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch3[] = {
-//	               │    │Shift│ Control │AltGr│↑AltGr↑│
-//	               ╞════╪═════╪═════════╪═════╪═══════╡
-	{VK_DIVIDE  , 0, '/', L'÷', WCH_NONE, L'∕', L'⁄'  },
-	{VK_MULTIPLY, 0, '*', L'×', WCH_NONE, L'⋅', L'⁢'   },
-	{VK_SPACE   , 0, ' ',  ' ',   ' '   , L' ', L' '  },
+//	               │    │Shift│ Control │ Kana│↑Kana↑│
+//	               ╞════╪═════╪═════════╪═════╪══════╡
+	{VK_DIVIDE  , 0, '/', L'÷', WCH_NONE, L'∕', L'⁄' },
+	{VK_MULTIPLY, 0, '*', L'×', WCH_NONE, L'⋅', L'⁢'  },
+	{VK_SPACE   , 0, ' ',  ' ',   ' '   , L' ', L' ' },
 	{0}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
-//	                                    │     │Shift│ Control │  AltGr  │ ↑AltGr↑ │               │         │  Shift  │ Control │  AltGr  │↑AltGr↑│
-//	                                    ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════════╪═════════╪═════════╪═════════╪═══════╡
-	{VK_OEM_3     , 0                   ,  '`',  '~', WCH_NONE, L'∀'   , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'°'},
-	{'1'          , SGCAPS              ,  '1',  '!', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'¹'    , WCH_NONE, WCH_NONE, L'⅟'},
-	{'2'          , SGCAPS              ,  '2',  '@', WCH_NONE, WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'},
-	{'3'          , SGCAPS              ,  '3',  '#', WCH_NONE, L'§'    , L'⅓'    }, {VK__none_, 0, L'³'    , L'⅓'    },
-	{'4'          , SGCAPS              ,  '4',  '$', WCH_NONE, L'₽'    , L'€'    }, {VK__none_, 0, L'⁴'    , L'¼'    },
-	{'5'          , SGCAPS              ,  '5',  '%', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁵'    , L'¾'    , WCH_NONE, L'⅕'},
-	{'6'          , SGCAPS              ,  '6',  '^', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'},
-	{'7'          , SGCAPS              ,  '7',  '&', WCH_NONE, WCH_DEAD, L'∏'    }, {VK__none_, 0, L'⁷'    , L'⅞'    , WCH_NONE, L'⅛'},
-	{'8'          , SGCAPS              ,  '8', L'İ', WCH_NONE, L'ı'    , L'İ'    }, {VK__none_, 0, L'⁸'    , L'⅛'    },
-	{'9'          , SGCAPS              ,  '9',  '(', WCH_NONE, L'≤'    , L'∃'   }, {VK__none_, 0, L'⁹'    , L'⅜'    },
-	{'0'          , SGCAPS              ,  '0',  ')', WCH_NONE, L'≥'    , WCH_NONE}, {VK__none_, 0, L'⁰'    , L'⅝'    },
-	{VK_OEM_MINUS , SGCAPS              ,  '-',  '_', WCH_NONE, L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    },
-	{VK_OEM_PLUS  , 0                   ,  '=',  '+', WCH_NONE, WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'´', L'ˇ'},
-	{'Q'          , SGCAPS | CAPLOKALTGR,  'q',  'Q', WCH_NONE, L'ä'    , L'Ä'    }, {VK__none_, 0, L'ο'    , L'Ο'    },
-	{'W'          , SGCAPS | CAPLOKALTGR,  'w',  'W', WCH_NONE, L'ś'    , L'Ś'    }, {VK__none_, 0, L'ψ'    , L'Ψ'    },
-	{'E'          , SGCAPS | CAPLOKALTGR,  'e',  'E', WCH_NONE, L'ě'    , L'Ě'    }, {VK__none_, 0, L'ε'    , L'Ε'    },
-	{'R'          , SGCAPS | CAPLOKALTGR,  'r',  'R', WCH_NONE, L'ř'    , L'Ř'    }, {VK__none_, 0, L'ρ'    , L'Ρ'    },
-	{'T'          , SGCAPS | CAPLOKALTGR,  't',  'T', WCH_NONE, L'ť'    , L'Ť'    }, {VK__none_, 0, L'θ'    , L'Θ'    },
-	{'Y'          , SGCAPS | CAPLOKALTGR,  'y',  'Y', WCH_NONE, L'ý'    , L'Ý'    }, {VK__none_, 0, L'υ'    , L'Υ'    },
-	{'U'          ,          CAPLOK     ,  'u',  'U', WCH_NONE, L'ů'    , L'Ů'    },
-	{'I'          , SGCAPS | CAPLOKALTGR,  'i',  'I', WCH_NONE, L'í'    , L'Í'    }, {VK__none_, 0, L'ι'    , L'Ι'    },
-	{'O'          , SGCAPS | CAPLOKALTGR,  'o',  'O', WCH_NONE, L'ô'    , L'Ô'    }, {VK__none_, 0, L'ω'    , L'Ω'    },
-	{'P'          , SGCAPS | CAPLOKALTGR,  'p',  'P', WCH_NONE, L'ś'    , L'Ś'    }, {VK__none_, 0, L'π'    , L'Π'    },
-	{VK_OEM_4     , SGCAPS | CAPLOKALTGR,  '[',  '{', WCH_NONE, L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    },
-	{VK_OEM_6     , SGCAPS | CAPLOKALTGR,  ']',  '}', WCH_ESC , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    },
-	{VK_OEM_5     , 0                   , '\\',  '|', WCH_FS  , WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE , L'¨', '^'},
-	{'A'          , SGCAPS | CAPLOKALTGR,  'a',  'A', WCH_NONE, L'á'    , L'Á'    }, {VK__none_, 0, L'α'    , L'Α'    },
-	{'S'          , SGCAPS | CAPLOKALTGR,  's',  'S', WCH_NONE, L'š'    , L'Š'    }, {VK__none_, 0, L'σ'    , L'Σ'    },
-	{'D'          , SGCAPS | CAPLOKALTGR,  'd',  'D', WCH_NONE, L'ď'    , L'Ď'    }, {VK__none_, 0, L'δ'    , L'Δ'    },
-	{'F'          , SGCAPS | CAPLOKALTGR,  'f',  'F', WCH_NONE, L'ę'    , L'Ę'    }, {VK__none_, 0, L'φ'    , L'Φ'    },
-	{'G'          , SGCAPS | CAPLOKALTGR,  'g',  'G', WCH_NONE, L'ț'    , L'Ț'    }, {VK__none_, 0, L'γ'    , L'Γ'    },
-	{'H'          , SGCAPS | CAPLOKALTGR,  'h',  'H', WCH_NONE, L'ą'    , L'Ą'    }, {VK__none_, 0, L'η'    , L'Η'    },
-	{'J'          , SGCAPS | CAPLOKALTGR,  'j',  'J', WCH_NONE, L'ó'    , L'Ó'    }, {VK__none_, 0, L'¢'    , L'£'    },
-	{'K'          , SGCAPS | CAPLOKALTGR,  'k',  'K', WCH_NONE, L'ł'    , L'Ł'    }, {VK__none_, 0, L'κ'    , L'Κ'    },
-	{'L'          , SGCAPS | CAPLOKALTGR,  'l',  'L', WCH_NONE, L'ľ'    , L'Ľ'    }, {VK__none_, 0, L'λ'    , L'Λ'    },
-	{VK_OEM_1     , SGCAPS | CAPLOKALTGR,  ';',  ':', WCH_GS  , L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    },
-	{VK_OEM_7     , SGCAPS | CAPLOKALTGR, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    },
-	{'Z'          , SGCAPS | CAPLOKALTGR,  'z',  'Z', WCH_NONE, L'ž'    , L'Ž'    }, {VK__none_, 0, L'ζ'    , L'Ζ'    },
-	{'X'          , SGCAPS | CAPLOKALTGR,  'x',  'X', WCH_NONE, L'ć'    , L'Ć'    }, {VK__none_, 0, L'ξ'    , L'Ξ'    },
-	{'C'          , SGCAPS | CAPLOKALTGR,  'c',  'C', WCH_NONE, L'č'    , L'Č'    }, {VK__none_, 0, L'ς'    , L'Σ'    },
-	{'V'          , SGCAPS | CAPLOKALTGR,  'v',  'V', WCH_NONE, L'ș'    , L'Ș'    }, {VK__none_, 0, L'¥'    , L'¥'    },
-	{'B'          , SGCAPS | CAPLOKALTGR,  'b',  'B', WCH_NONE, L'ß'    , L'ẞ'    }, {VK__none_, 0, L'β'    , L'Β'    },
-	{'N'          , SGCAPS | CAPLOKALTGR,  'n',  'N', WCH_NONE, L'ň'    , L'Ň'    }, {VK__none_, 0, L'ν'    , L'Ν'    },
-	{'M'          , SGCAPS | CAPLOKALTGR,  'm',  'M', WCH_NONE, L'ń'    , L'Ń'    }, {VK__none_, 0, L'μ'    , L'Μ'    },
-	{VK_OEM_COMMA ,          CAPLOKALTGR,  ',',  '<', WCH_NONE, L'μ'    , L'Μ'    },
-	{VK_OEM_PERIOD,          CAPLOKALTGR,  '.',  '>', WCH_NONE, L'ú'    , L'Ú'    },
-	{VK_OEM_2     , 0                   ,  '/',  '?', WCH_NONE, L'÷'    , L'∕'    },
-	{VK_OEM_102   , 0                   , '\\',  '|', WCH_NONE, L'ß'    , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'˝'},
+//	                      │     │Shift│ Control │  Kana   │ ↑Kana↑  │               │         │  Shift  │ Control │  Kana   │↑Kana↑│
+//	                      ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════════╪═════════╪═════════╪═════════╪══════╡
+	{VK_OEM_3     , 0     ,  '`',  '~', WCH_NONE, L'∀'   , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'°'},
+	{'1'          , SGCAPS,  '1',  '!', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'¹'    , WCH_NONE, WCH_NONE, L'⅟'},
+	{'2'          , SGCAPS,  '2',  '@', WCH_NONE, WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'},
+	{'3'          , SGCAPS,  '3',  '#', WCH_NONE, L'§'    , L'⅓'    }, {VK__none_, 0, L'³'    , L'⅓'    },
+	{'4'          , SGCAPS,  '4',  '$', WCH_NONE, L'₽'    , L'€'    }, {VK__none_, 0, L'⁴'    , L'¼'    },
+	{'5'          , SGCAPS,  '5',  '%', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁵'    , L'¾'    , WCH_NONE, L'⅕'},
+	{'6'          , SGCAPS,  '6',  '^', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'},
+	{'7'          , SGCAPS,  '7',  '&', WCH_NONE, WCH_DEAD, L'∏'    }, {VK__none_, 0, L'⁷'    , L'⅞'    , WCH_NONE, L'⅛'},
+	{'8'          , SGCAPS,  '8', L'İ', WCH_NONE, L'ı'    , L'İ'    }, {VK__none_, 0, L'⁸'    , L'⅛'    },
+	{'9'          , SGCAPS,  '9',  '(', WCH_NONE, L'≤'    , L'∃'   }, {VK__none_, 0, L'⁹'    , L'⅜'    },
+	{'0'          , SGCAPS,  '0',  ')', WCH_NONE, L'≥'    , WCH_NONE}, {VK__none_, 0, L'⁰'    , L'⅝'    },
+	{VK_OEM_MINUS , SGCAPS,  '-',  '_', WCH_NONE, L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    },
+	{VK_OEM_PLUS  , 0     ,  '=',  '+', WCH_NONE, WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'´', L'ˇ'},
+	{'Q'          , SGCAPS,  'q',  'Q', WCH_NONE, L'ä'    , L'Ä'    }, {VK__none_, 0, L'ο'    , L'Ο'    },
+	{'W'          , SGCAPS,  'w',  'W', WCH_NONE, L'ś'    , L'Ś'    }, {VK__none_, 0, L'ψ'    , L'Ψ'    },
+	{'E'          , SGCAPS,  'e',  'E', WCH_NONE, L'ě'    , L'Ě'    }, {VK__none_, 0, L'ε'    , L'Ε'    },
+	{'R'          , SGCAPS,  'r',  'R', WCH_NONE, L'ř'    , L'Ř'    }, {VK__none_, 0, L'ρ'    , L'Ρ'    },
+	{'T'          , SGCAPS,  't',  'T', WCH_NONE, L'ť'    , L'Ť'    }, {VK__none_, 0, L'θ'    , L'Θ'    },
+	{'Y'          , SGCAPS,  'y',  'Y', WCH_NONE, L'ý'    , L'Ý'    }, {VK__none_, 0, L'υ'    , L'Υ'    },
+	{'U'          , CAPLOK,  'u',  'U', WCH_NONE, L'ů'    , L'Ů'    },
+	{'I'          , SGCAPS,  'i',  'I', WCH_NONE, L'í'    , L'Í'    }, {VK__none_, 0, L'ι'    , L'Ι'    },
+	{'O'          , SGCAPS,  'o',  'O', WCH_NONE, L'ô'    , L'Ô'    }, {VK__none_, 0, L'ω'    , L'Ω'    },
+	{'P'          , SGCAPS,  'p',  'P', WCH_NONE, L'ś'    , L'Ś'    }, {VK__none_, 0, L'π'    , L'Π'    },
+	{VK_OEM_4     , SGCAPS,  '[',  '{', WCH_NONE, L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    },
+	{VK_OEM_6     , SGCAPS,  ']',  '}', WCH_ESC , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    },
+	{VK_OEM_5     , 0     , '\\',  '|', WCH_FS  , WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE , L'¨', '^'},
+	{'A'          , SGCAPS,  'a',  'A', WCH_NONE, L'á'    , L'Á'    }, {VK__none_, 0, L'α'    , L'Α'    },
+	{'S'          , SGCAPS,  's',  'S', WCH_NONE, L'š'    , L'Š'    }, {VK__none_, 0, L'σ'    , L'Σ'    },
+	{'D'          , SGCAPS,  'd',  'D', WCH_NONE, L'ď'    , L'Ď'    }, {VK__none_, 0, L'δ'    , L'Δ'    },
+	{'F'          , SGCAPS,  'f',  'F', WCH_NONE, L'ę'    , L'Ę'    }, {VK__none_, 0, L'φ'    , L'Φ'    },
+	{'G'          , SGCAPS,  'g',  'G', WCH_NONE, L'ț'    , L'Ț'    }, {VK__none_, 0, L'γ'    , L'Γ'    },
+	{'H'          , SGCAPS,  'h',  'H', WCH_NONE, L'ą'    , L'Ą'    }, {VK__none_, 0, L'η'    , L'Η'    },
+	{'J'          , SGCAPS,  'j',  'J', WCH_NONE, L'ó'    , L'Ó'    }, {VK__none_, 0, L'¢'    , L'£'    },
+	{'K'          , SGCAPS,  'k',  'K', WCH_NONE, L'ł'    , L'Ł'    }, {VK__none_, 0, L'κ'    , L'Κ'    },
+	{'L'          , SGCAPS,  'l',  'L', WCH_NONE, L'ľ'    , L'Ľ'    }, {VK__none_, 0, L'λ'    , L'Λ'    },
+	{VK_OEM_1     , SGCAPS,  ';',  ':', WCH_GS  , L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    },
+	{VK_OEM_7     , SGCAPS, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    },
+	{'Z'          , SGCAPS,  'z',  'Z', WCH_NONE, L'ž'    , L'Ž'    }, {VK__none_, 0, L'ζ'    , L'Ζ'    },
+	{'X'          , SGCAPS,  'x',  'X', WCH_NONE, L'ć'    , L'Ć'    }, {VK__none_, 0, L'ξ'    , L'Ξ'    },
+	{'C'          , SGCAPS,  'c',  'C', WCH_NONE, L'č'    , L'Č'    }, {VK__none_, 0, L'ς'    , L'Σ'    },
+	{'V'          , SGCAPS,  'v',  'V', WCH_NONE, L'ș'    , L'Ș'    }, {VK__none_, 0, L'¥'    , L'¥'    },
+	{'B'          , SGCAPS,  'b',  'B', WCH_NONE, L'ß'    , L'ẞ'    }, {VK__none_, 0, L'β'    , L'Β'    },
+	{'N'          , SGCAPS,  'n',  'N', WCH_NONE, L'ň'    , L'Ň'    }, {VK__none_, 0, L'ν'    , L'Ν'    },
+	{'M'          , SGCAPS,  'm',  'M', WCH_NONE, L'ń'    , L'Ń'    }, {VK__none_, 0, L'μ'    , L'Μ'    },
+	{VK_OEM_COMMA , 0     ,  ',',  '<', WCH_NONE, L'μ'    , L'Μ'    },
+	{VK_OEM_PERIOD, 0     ,  '.',  '>', WCH_NONE, L'ú'    , L'Ú'    },
+	{VK_OEM_2     , 0     ,  '/',  '?', WCH_NONE, L'÷'    , L'∕'    },
+	{VK_OEM_102   , 0     , '\\',  '|', WCH_NONE, L'ß'    , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'˝'},
 	{0}
 };
 
@@ -292,7 +313,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
 // as coming from the main section of the kbd (aVkToWch1 and aVkToWch5)
 // before considering the numpad (aVkToWch6).
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch5[] = {
-//	              │    │  Shift  │ Control │  AltGr  │ ↑AltGr↑ │
+//	              │    │  Shift  │ Control │  Kana   │ ↑Kana↑  │
 //	              ╞════╪═════════╪═════════╪═════════╪═════════╡
 	{VK_NUMPAD0, 0, '0', WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE},
 	{VK_NUMPAD1, 0, '1', WCH_NONE, WCH_NONE, L'└'    , L'╚'    },
@@ -386,7 +407,7 @@ static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNamesExt[] = {
 	0x1d, L"Правый Ctrl",
 	0x35, L"Num /",
 	0x37, L"Prnt Scrn",
-	0x38, L"Правый Alt",
+	0x38, L"Kana",
 	0x45, L"Num Lock",
 	0x46, L"Break",
 	0x47, L"Home",
@@ -612,5 +633,18 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 	/*
 	 * Locale-specific special processing
 	 */
-	MAKELONG(KLLF_ALTGR, KBD_VERSION),
+	MAKELONG(0, KBD_VERSION),
 };
+
+// 32!OpenKeyboardLayoutFileWorker
+// user32!OpenKeyboardLayoutFile
+// user32!CommonCreateWindowStation
+// user32!CreateWindowStationW
+// winlogon!CreatePrimaryTerminal
+// winlogon!CSession::CreatePrimaryTerminal
+// winlogon!WinMain
+
+PKBDTABLES KbdLayerDescriptor(VOID) // @1
+{
+	return &KbdTables;
+}

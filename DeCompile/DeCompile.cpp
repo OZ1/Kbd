@@ -746,10 +746,12 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 	putwchar(L'\t');
 	auto const KbdVersion = GET_KBD_VERSION(KbdTables);
 	if (KbdVersion) wprintf_s(L"MAKELONG(");
-	auto kllf = KbdTables->fLocaleFlags & 0xFFFF;
-	if  (kllf & KLLF_ALTGR    ) { wprintf_s(L"KLLF_ALTGR"    ); if (kllf &= ~KLLF_ALTGR    ) wprintf_s(L" | "); }
-	if  (kllf & KLLF_SHIFTLOCK) { wprintf_s(L"KLLF_SHIFTLOCK"); if (kllf &= ~KLLF_SHIFTLOCK) wprintf_s(L" | "); }
-	if  (kllf & KLLF_LRM_RLM  ) { wprintf_s(L"KLLF_LRM_RLM"  ); if (kllf &= ~KLLF_LRM_RLM  ) wprintf_s(L" | "); }
+	if (auto kllf = KbdTables->fLocaleFlags & 0xFFFF)
+	{
+		if  (kllf & KLLF_ALTGR    ) { wprintf_s(L"KLLF_ALTGR"    ); if (kllf &= ~KLLF_ALTGR    ) wprintf_s(L" | "); }
+		if  (kllf & KLLF_SHIFTLOCK) { wprintf_s(L"KLLF_SHIFTLOCK"); if (kllf &= ~KLLF_SHIFTLOCK) wprintf_s(L" | "); }
+		if  (kllf & KLLF_LRM_RLM  ) { wprintf_s(L"KLLF_LRM_RLM"  ); if (kllf &= ~KLLF_LRM_RLM  ) wprintf_s(L" | "); }
+	} else putwchar(L'0');
 	if (KbdVersion == KBD_VERSION && KBD_VERSION) _putws(L", KBD_VERSION),"); else wprintf_s(L", %hu),\n", KbdVersion);
 	_putws(LR"(
 	/*
