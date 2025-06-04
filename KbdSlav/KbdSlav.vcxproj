@@ -62,7 +62,7 @@
     <ResourceCompile Include="KbdSlav.RC">
       <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
     </ResourceCompile>
-    <ResourceCompile Include="MyKbdSlav.RC">
+    <ResourceCompile Include="MyKbdSlav.rc">
       <ExcludedFromBuild Condition="'$(Configuration)'=='MSKLC'">true</ExcludedFromBuild>
     </ResourceCompile>
   </ItemGroup>

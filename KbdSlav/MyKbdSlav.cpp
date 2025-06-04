@@ -224,13 +224,13 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch2[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch3[] = {
-//	                    │     │Shift│ Control │AltGr│↑AltGr↑│
-//	                    ╞═════╪═════╪═════════╪═════╪═══════╡
-	{VK_DIVIDE  , SGCAPS, L'÷', '/' , WCH_NONE, L'∕', L'⁄'  }, {VK__none_, 0, '/', '/'},
-	{VK_MULTIPLY, SGCAPS, L'×', '*' , WCH_NONE, L'⋅', L'⁢'   }, {VK__none_, 0, '*', '*'},
-	{VK_SUBTRACT, SGCAPS, L'−', '-' , WCH_NONE, L'–', L'—'  }, {VK__none_, 0, '-', '-'},
-	{VK_ADD     , 0     ,  '+', '+' , WCH_NONE, L'±', L'∓'  },
-	{VK_SPACE   , 0     ,  ' ', ' ' ,   ' '   , L' ', L' '  },
+//	                    │    │Shift│ Control │AltGr│↑AltGr↑│
+//	                    ╞════╪═════╪═════════╪═════╪═══════╡
+	{VK_DIVIDE  , SGCAPS, '/', L'÷', WCH_NONE, L'∕', L'⁄'  }, {VK__none_, 0, '/', '/'},
+	{VK_MULTIPLY, SGCAPS, '*', L'×', WCH_NONE, L'⋅', L'⁢'   }, {VK__none_, 0, '*', '*'},
+	{VK_SUBTRACT, SGCAPS, '-', L'−', WCH_NONE, L'–', L'—'  }, {VK__none_, 0, '-', '-'},
+	{VK_ADD     , 0     , '+',  '+', WCH_NONE, L'±', L'∓'  },
+	{VK_SPACE   , 0     , ' ',  ' ',   ' '   , L' ', L' '  },
 	{0}
 };
 

@@ -42,7 +42,7 @@
     <ResourceCompile Include="KbdSlav.RC">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="MyKbdSlav.RC">
+    <ResourceCompile Include="MyKbdSlav.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
