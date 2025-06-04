@@ -93,7 +93,7 @@ static ALLOC_SECTION_LDATA VSC_VK aE0VscToVk[] = {
 	0x1C, KBDEXT | X1C     , // Numpad Enter
 	0x1D, KBDEXT | X1D     , // RControl
 	0x20, KBDEXT | X20     , // Speedracer: Volume Mute
-	0x21, KBDEXT | X21     , // Speedracer: Launch App 2
+	0x21, KBDEXT | X21     , // Speedracer: Launch App 2 (Calculator)
 	0x22, KBDEXT | X22     , // Speedracer: Media Play/Pause
 	0x24, KBDEXT | X24     , // Speedracer: Media Stop
 	0x2E, KBDEXT | X2E     , // Speedracer: Volume Down
