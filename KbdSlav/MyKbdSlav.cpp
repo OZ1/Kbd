@@ -33,6 +33,9 @@
 #define WCH_RS  '\x1E' // Record separator
 #define WCH_US  '\x1F' // Unit   separator
 #define WCH_DEL '\x7F'
+#define WCH_NEL L'\x85' // Next line
+#define WCH_LS  L'\x2028' // Line spearator
+#define WCH_PS  L'\x2029' // Paragraph separator
 
 #define VK_TO_WCHAR_TABLE_ENTRY(aVkToWchI) \
 	{(PVK_TO_WCHARS1)aVkToWchI, ARRAYSIZE(aVkToWchI[0].wch), sizeof aVkToWchI[0]}
@@ -221,30 +224,42 @@ static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
 *
 \***************************************************************************/
 static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch0[] = {
-//	          |     |Shift|
-//	          |=====|=====|
-	{VK_TAB, 0, '\t', '\t'},
+//	                    |     |Shift|
+//	                    |=====|=====|
+	{VK_TAB          , 0, '\t', '\t'},
+//	{VK_ABNT_C2      , 0,  '.',  '.'},
+//	{VK_SEPARATOR    , 0,  ',',  ','},
+//	{VK_OEM_NEC_EQUAL, 0,  '=',  '='},
+//	{VK_OEM_AUTO     , 0,  '`',  '~'},
+//	{VK_OEM_8        , 0, L'§',  '!'},
 	{0}
  };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch1[] = {
-//	             |        |  Shift | Control|
-//	             |========|========|========|
-	{VK_CANCEL, 0,  '\3'  ,  '\3'  ,  '\3'  },
+//	             │        │ Shift  │ Control│
+//	             ╞════════╪════════╪════════╡
+	{VK_CANCEL, 0, WCH_ETX, WCH_ETX, WCH_ETX},
 	{VK_BACK  , 0,  '\b'  ,  '\b'  , WCH_DEL},
-	{VK_RETURN, 0,  '\r'  ,  '\r'  ,  '\n'  },
 	{VK_ESCAPE, 0, WCH_ESC, WCH_ESC, WCH_ESC},
 	{0}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch2[] = {
-//	              │    │Shift│ Control │ Kana│
-//	              ╞════╪═════╪═════════╪═════╡
-	{VK_DECIMAL, 0, ',', '.' , WCH_NONE, L'…'}, // L'‥'
+static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch2[] = {
+//	             │     │ Shift  │Cntrl│ Kana  │ ↑Kana↑│
+//	             ╞═════╪════════╪═════╪═══════╪═══════╡
+	{VK_RETURN, 0, '\r', WCH_NEL, '\n', WCH_LS, WCH_PS},
 	{0}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch3[] = {
+static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
+//	              │    │Shift│ Control │ Kana│
+//	              ╞════╪═════╪═════════╪═════╡
+	{VK_DECIMAL, 0, ',', '.' , WCH_NONE, L'…'}, // L'‥'
+//	{VK_ABNT_C1, 0, '/', '?' , WCH_NONE, L'°'},
+	{0}
+};
+
+static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
 //	                    │    │Shift│ Control │Kana │↑Kana↑│
 //	                    ╞════╪═════╪═════════╪═════╪══════╡
 	{VK_DIVIDE  , SGCAPS, '/', L'÷', WCH_NONE, L'∕', L'⁄' }, {VK__none_, 0, '/', '/'},
@@ -255,7 +270,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch3[] = {
 	{0}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
+static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 //	                      │     │Shift│ Control │  Kana   │ ↑Kana↑  │               │     │Shift│ Control │ Kana    │↑Kana↑│
 //	                      ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════╪═════╪═════════╪═════════╪══════╡
 	{VK_OEM_3     , SGCAPS, L'ё', L'Ё', WCH_NONE, L'̀'    , L'³'    }, {VK__none_, 0,  '`',  '~'},
@@ -312,7 +327,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
 // Put this last so that VkKeyScan interprets number characters
 // as coming from the main section of the kbd (aVkToWch0 and aVkToWch5)
 // before considering the numpad (aVkToWch1).
-static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch5[] = {
+static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWchN[] = {
 //	              │    │  Shift  │ Control │ Kana│
 //	              ╞════╪═════════╪═════════╪═════╡
 	{VK_NUMPAD0, 0, '0', WCH_NONE, WCH_NONE, L'↔'},
@@ -334,7 +349,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch2),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch3),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch4),
-	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch5),
+	VK_TO_WCHAR_TABLE_ENTRY(aVkToWchT),
+	VK_TO_WCHAR_TABLE_ENTRY(aVkToWchN),
 	NULL
 };
 
