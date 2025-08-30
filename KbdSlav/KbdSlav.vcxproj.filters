@@ -37,6 +37,7 @@
     <None Include="MyKbdSlav.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="CCS Control Keyboard Layouts.reg" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KbdSlav.RC">

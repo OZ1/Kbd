@@ -47,6 +47,7 @@
     <ClInclude Include="KbdSlav.H" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CCS Control Keyboard Layouts.reg" />
     <None Include="KbdSlav.DEF">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>

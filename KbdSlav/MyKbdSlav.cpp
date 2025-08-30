@@ -548,3 +548,5 @@ PKBDTABLES KbdLayerDescriptor(VOID) // @1
 {
 	return &KbdTables;
 }
+
+// InstallLayoutOrTip(L"0x0419:0xA0000419", ILOT_UNINSTALL=1) // +102(0x419,0x419,0,0,0,0) −103(0x419,0x419,0)
