@@ -234,7 +234,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch0[] = {
 //	{VK_OEM_NEC_EQUAL, 0,  '=',  '='},
 //	{VK_OEM_AUTO     , 0,  '`',  '~'},
 //	{VK_OEM_8        , 0, L'§',  '!'},
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch1[] = {
@@ -243,14 +243,14 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch1[] = {
 	{VK_CANCEL, 0, WCH_ETX, WCH_ETX, WCH_ETX},
 	{VK_BACK  , 0,  '\b'  ,  '\b'  , WCH_DEL},
 	{VK_ESCAPE, 0, WCH_ESC, WCH_ESC, WCH_ESC},
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch2[] = {
 //	             |        | Shift  |Cntrl| Kana  | ↑Kana↑|
 //	             |========|========|=====|=======|=======|
 	{VK_RETURN, 0,  '\r'  , WCH_NEL, '\n', WCH_LS, WCH_PS},
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
@@ -258,7 +258,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
 //	              ╞════╪═════╪═════════╪═════╡
 	{VK_DECIMAL, 0, '.', ',' , WCH_NONE, L'…'}, // L'‥'
 //	{VK_ABNT_C1, 0, '/', '?' , WCH_NONE, L'°'},
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
@@ -267,7 +267,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
 	{VK_DIVIDE  , 0, '/', L'÷', WCH_NONE, L'∕', L'⁄' },
 	{VK_MULTIPLY, 0, '*', L'×', WCH_NONE, L'⋅', L'⁢'  },
 	{VK_SPACE   , 0, ' ',  ' ',   ' '   , L' ', L' ' },
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
@@ -321,7 +321,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{VK_OEM_PERIOD, 0     ,  '.',  '>', WCH_NONE, L'ú'    , L'Ú'    },
 	{VK_OEM_2     , 0     ,  '/',  '?', WCH_NONE, L'÷'    , L'∕'    },
 	{VK_OEM_102   , 0     , '\\',  '|', WCH_NONE, L'ß'    , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'˝'},
-	{0}
+	{}
 };
 
 // Put this last so that VkKeyScan interprets number characters
@@ -340,7 +340,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchN[] = {
 	{VK_NUMPAD7, 0, '7', WCH_NONE, WCH_NONE, L'┌'    , L'╔'    },
 	{VK_NUMPAD8, 0, '8', WCH_NONE, WCH_NONE, L'─'    , L'═'    },
 	{VK_NUMPAD9, 0, '9', WCH_NONE, WCH_NONE, L'┐'    , L'╗'    },
-	{0}
+	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
