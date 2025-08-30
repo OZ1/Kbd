@@ -254,10 +254,10 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch2[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
-//	              │    │Shift│ Control │ Kana│
-//	              ╞════╪═════╪═════════╪═════╡
-	{VK_DECIMAL, 0, '.', ',' , WCH_NONE, L'…'}, // L'‥'
-//	{VK_ABNT_C1, 0, '/', '?' , WCH_NONE, L'°'},
+//	                   │    │Shft│ Control │ Kana│               │    │Shft│Ctrl│ Kana│
+//	                   ╞════╪════╪═════════╪═════╡               ╞════╪════╪════╪═════╡
+	{VK_DECIMAL, SGCAPS, '.', ',', ','     , L'…'}, {VK__none_, 0, ',', '.', '.', L'‥'}, // Shift=WCH_DEL, no Caps+Ctrl|Kana
+//	{VK_ABNT_C1, 0     , '/', '?', WCH_NONE, L'°'},
 	{}
 };
 

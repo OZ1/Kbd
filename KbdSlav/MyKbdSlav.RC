@@ -1,7 +1,7 @@
 ﻿#include <WinVer.h>
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     3,0,0,77
+FILEVERSION     3,0,0,80
 PRODUCTVERSION  3,0,0,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
@@ -35,7 +35,7 @@ END
 STRINGTABLE DISCARDABLE
 LANGUAGE 0x19, 1
 BEGIN
-    1200    "ru-RU"
-    1100    "Русскій"
-    1000    "Азбука"
+    1000    "Азбука"  // Layout Text
+    1100    "Русскій" // Layout Language Name
+    1200    "ru-RU"   // Layout Locale Name
 END

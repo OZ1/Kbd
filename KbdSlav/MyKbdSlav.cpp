@@ -252,10 +252,10 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch2[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
-//	              │    │Shift│ Control │ Kana│
-//	              ╞════╪═════╪═════════╪═════╡
-	{VK_DECIMAL, 0, ',', '.' , WCH_NONE, L'…'}, // L'‥'
-//	{VK_ABNT_C1, 0, '/', '?' , WCH_NONE, L'°'},
+//	                   │    │Shft│ Control │ Kana│               │    │Shft│Ctrl│ Kana│
+//	                   ╞════╪════╪═════════╪═════╡               ╞════╪════╪════╪═════╡
+	{VK_DECIMAL, SGCAPS, ',', '.', '.'     , L'…'}, {VK__none_, 0, '.', ',', ',', L'‥'}, // Shift=WCH_DEL, no Caps+Ctrl|Kana
+//	{VK_ABNT_C1, 0     , '/', '?', WCH_NONE, L'°'},
 	{}
 };
 
@@ -275,7 +275,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 //	                      ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════╪═════╪═════════╪═════════╪══════╡
 	{VK_OEM_3     , SGCAPS, L'ё', L'Ё', WCH_NONE, L'̀'    , L'³'    }, {VK__none_, 0,  '`',  '~'},
 	{'1'          , SGCAPS,  '!',  '[', WCH_NONE, L'́'    , WCH_DEAD}, {VK__none_, 0,  '1',  '!', WCH_NONE, WCH_NONE, L'ᵢ'},
-	{'2'          , SGCAPS, L'«',  ']', WCH_NONE, L'̏'    , '\"'    }, {VK__none_, 0,  '2',  '@'},
+	{'2'          , SGCAPS, L'«',  ']', WCH_NONE, L'̏'    , '\"'    }, {VK__none_, 0,  '2',  '@', WCH_RS },
 	{'3'          , SGCAPS, L'»', L'№', WCH_NONE, L'̄'    , L'§'    }, {VK__none_, 0,  '3',  '#'},
 	{'4'          , SGCAPS, L'₽', L'€', WCH_NONE,  '$'    , L'¥'    }, {VK__none_, 0,  '4',  '$'},
 	{'5'          , SGCAPS,  '%', L'‰', WCH_NONE, WCH_DEAD, L'½'    }, {VK__none_, 0,  '5',  '%', WCH_NONE, L'°'},
@@ -284,7 +284,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'8'          , SGCAPS, L'×',  '}', WCH_NONE, L'∞'    , L'∏'    }, {VK__none_, 0,  '8',  '*'},
 	{'9'          , SGCAPS,  '(',  '<', WCH_NONE, L'҃'    , L'≤'    }, {VK__none_, 0,  '9',  '('},
 	{'0'          , SGCAPS,  ')',  '>', WCH_NONE, L'҂'    , L'≥'    }, {VK__none_, 0,  '0',  ')'},
-	{VK_OEM_MINUS , SGCAPS,  '-', L'−', WCH_NONE, L'­'     , L'—'    }, {VK__none_, 0,  '-',  '_'},
+	{VK_OEM_MINUS , SGCAPS,  '-', L'−', WCH_NONE, L'­'     , L'—'    }, {VK__none_, 0,  '-',  '_', WCH_US },
 	{VK_OEM_PLUS  , SGCAPS,  '=', L'≠', WCH_NONE, L'≈'    , L'≡'    }, {VK__none_, 0,  '=',  '+'},
 	{'Q'          , SGCAPS, L'й', L'Й', WCH_NONE, L'ј'    , L'Ј'    }, {VK__none_, 0,  'q',  'Q'},
 	{'W'          , SGCAPS, L'ц', L'Ц', WCH_NONE, L'џ'    , L'Џ'    }, {VK__none_, 0,  'w',  'W'},
@@ -296,9 +296,9 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'I'          , SGCAPS, L'ш', L'Ш', WCH_NONE, L'ї'    , L'Ї'    }, {VK__none_, 0,  'i',  'I'},
 	{'O'          , SGCAPS, L'щ', L'Щ', WCH_NONE, L'ѹ'    , L'Ѹ'    }, {VK__none_, 0,  'o',  'O'},
 	{'P'          , SGCAPS, L'з', L'З', WCH_NONE, L'ꙁ'    , L'Ꙁ'    }, {VK__none_, 0,  'p',  'P'},
-	{VK_OEM_4     , SGCAPS, L'х', L'Х', WCH_NONE, L'ꙗ'   , L'Ꙗ'    }, {VK__none_, 0,  '[',  '{'},
-	{VK_OEM_6     , SGCAPS, L'ъ', L'Ъ', WCH_NONE, L'ѩ'    , L'Ѩ'    }, {VK__none_, 0,  ']',  '}'},
-	{VK_OEM_5     , SGCAPS, '\\',  '/', WCH_NONE, L'ѥ'    , L'Ѥ'    }, {VK__none_, 0, '\\',  '|'},
+	{VK_OEM_4     , SGCAPS, L'х', L'Х', WCH_NONE, L'ꙗ'   , L'Ꙗ'    }, {VK__none_, 0,  '[',  '{', WCH_ESC},
+	{VK_OEM_6     , SGCAPS, L'ъ', L'Ъ', WCH_NONE, L'ѩ'    , L'Ѩ'    }, {VK__none_, 0,  ']',  '}', WCH_GS },
+	{VK_OEM_5     , SGCAPS, '\\',  '/', WCH_NONE, L'ѥ'    , L'Ѥ'    }, {VK__none_, 0, '\\',  '|', WCH_FS },
 	{'A'          , SGCAPS, L'ф', L'Ф', WCH_NONE, L'ѳ'    , L'Ѳ'    }, {VK__none_, 0,  'a',  'A'},
 	{'S'          , SGCAPS, L'ы', L'Ы', WCH_NONE, L'ѕ'    , L'Ѕ'    }, {VK__none_, 0,  's',  'S'},
 	{'D'          , SGCAPS, L'в', L'В', WCH_NONE, L'ћ'    , L'Ћ'    }, {VK__none_, 0,  'd',  'D'},
@@ -320,7 +320,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{VK_OEM_COMMA , SGCAPS, L'б', L'Б', WCH_NONE, L'ѭ'    , L'Ѭ'    }, {VK__none_, 0,  ',',  '<'},
 	{VK_OEM_PERIOD, SGCAPS, L'ю', L'Ю', WCH_NONE, L'ѫ'    , L'Ѫ'    }, {VK__none_, 0,  '.',  '>'},
 	{VK_OEM_2     , SGCAPS,  '.',  ',', WCH_NONE,  ':'    ,  ';'    }, {VK__none_, 0,  '/',  '?'},
-	{VK_OEM_102   , SGCAPS, '\\',  '/', WCH_FS  , L'ꙉ'    , L'Ꙉ'    }, {VK__none_, 0, '\\',  '|'},
+	{VK_OEM_102   , SGCAPS, '\\',  '/', WCH_FS  , L'ꙉ'    , L'Ꙉ'    }, {VK__none_, 0, '\\',  '|', WCH_FS },
 	{}
 };
 
