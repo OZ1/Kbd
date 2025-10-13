@@ -1,12 +1,14 @@
 ﻿#define KBD_TYPE KEYBOARD_TYPE_GENERIC_101
 
 #include <Windows.h>
+#include <WinUser.h>
 #include <kbd.h>
 
 #pragma data_seg(".data")
 #define ALLOC_SECTION_LDATA __declspec(allocate(".data"))
 
 #define VK_POWER 0x5E
+#define VK_ALTGR 0xE8
 
 #define WCH_SOH '\1' // Start of heading
 #define WCH_STX '\2' // Start of text
@@ -40,10 +42,44 @@
 #define VK_TO_WCHAR_TABLE_ENTRY(aVkToWchI) \
 	{(PVK_TO_WCHARS1)aVkToWchI, ARRAYSIZE(aVkToWchI[0].wch), sizeof aVkToWchI[0]}
 
+#if KBD_TYPE == KEYBOARD_TYPE_GENERIC_101
+#pragma region VK__none_
+#pragma warning(push)
+#pragma warning(disable:4005) // изменение макроопределения
+#if T00 != VK__none_ || \
+    T55 != VK__none_ || \
+    T60 != VK__none_ || \
+    T61 != VK__none_ || \
+    T70 != VK__none_ || \
+    T72 != VK__none_ || \
+    T74 != VK__none_ || \
+    T75 != VK__none_ || \
+    T77 != VK__none_ || \
+    T78 != VK__none_ || \
+    T79 != VK__none_ || \
+    T7A != VK__none_ || \
+    T7D != VK__none_
+#error Txx != VK__none_
+#endif
+#define T00 VK_ICO_00
+#define T55 VK_PRINT
+#define T60 VK_OEM_AX
+#define T61 VK_ICO_HELP
+#define T70 VK_EXECUTE
+#define T72 VK_ICO_CLEAR
+#define T74 VK_OEM_CUSEL
+#define T75 VK_OEM_ATTN
+#define T77 VK_OEM_COPY
+#define T78 VK_OEM_ENLW
+#define T79 VK_SELECT
+#define T7A VK_ATTN
+#define T7D VK_OEM_8
+#pragma warning(pop)
+#pragma endregion
+
 /***************************************************************************\
 * ausVK[] - Virtual Scan Code to Virtual Key conversion table
 \***************************************************************************/
-#if KBD_TYPE == KEYBOARD_TYPE_GENERIC_101
 static ALLOC_SECTION_LDATA USHORT ausVK[] = {
 	T00, T01, T02, T03, T04, T05, T06, T07, T08, T09, T0A, T0B, T0C, T0D, T0E, T0F,
 	T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T1A, T1B, T1C, T1D, T1E, T1F,
@@ -91,49 +127,49 @@ static ALLOC_SECTION_LDATA USHORT ausVK[] = {
 };
 
 static ALLOC_SECTION_LDATA VSC_VK aE0VscToVk[] = {
-	0x10, KBDEXT | X10     , // Speedracer: Previous Track
-	0x19, KBDEXT | X19     , // Speedracer: Next Track
-	0x1C, KBDEXT | X1C     , // Numpad Enter
-	0x1D, KBDEXT | X1D     , // RControl
-	0x20, KBDEXT | X20     , // Speedracer: Volume Mute
-	0x21, KBDEXT | X21     , // Speedracer: Launch App 2 (Calculator)
-	0x22, KBDEXT | X22     , // Speedracer: Media Play/Pause
-	0x24, KBDEXT | X24     , // Speedracer: Media Stop
-	0x2E, KBDEXT | X2E     , // Speedracer: Volume Down
-	0x30, KBDEXT | X30     , // Speedracer: Volume Up
-	0x32, KBDEXT | X32     , // Speedracer: Browser Home
-	0x35, KBDEXT | X35     , // Numpad Divide
-	0x37, KBDEXT | X37     , // Snapshot
-	0x38, KBDEXT | VK_OEM_8, // Kana
-	0x46, KBDEXT | X46     , // Break (Ctrl + Pause)
-	0x47, KBDEXT | X47     , // Home
-	0x48, KBDEXT | X48     , // Up
-	0x49, KBDEXT | X49     , // Prior
-	0x4B, KBDEXT | X4B     , // Left
-	0x4D, KBDEXT | X4D     , // Right
-	0x4F, KBDEXT | X4F     , // End
-	0x50, KBDEXT | X50     , // Down
-	0x51, KBDEXT | X51     , // Next
-	0x52, KBDEXT | X52     , // Insert
-	0x53, KBDEXT | X53     , // Delete
-	0x5B, KBDEXT | X5B     , // Left Win
-	0x5C, KBDEXT | X5C     , // Right Win
-	0x5D, KBDEXT | X5D     , // Application
-	0x5F, KBDEXT | X5F     , // Speedracer: Sleep
-	0x65, KBDEXT | X65     , // Speedracer: Browser Search
-	0x66, KBDEXT | X66     , // Speedracer: Browser Favorites
-	0x67, KBDEXT | X67     , // Speedracer: Browser Refresh
-	0x68, KBDEXT | X68     , // Speedracer: Browser Stop
-	0x69, KBDEXT | X69     , // Speedracer: Browser Forward
-	0x6A, KBDEXT | X6A     , // Speedracer: Browser Back
-	0x6B, KBDEXT | X6B     , // Speedracer: Launch App 1
-	0x6C, KBDEXT | X6C     , // Speedracer: Launch Mail
-	0x6D, KBDEXT | X6D     , // Speedracer: Launch Media Selector
+	0x10, KBDEXT | X10, // Speedracer: Previous Track
+	0x19, KBDEXT | X19, // Speedracer: Next Track
+	0x1C, KBDEXT | X1C, // Numpad Enter
+	0x1D, KBDEXT | X1D, // Right Control
+	0x20, KBDEXT | X20, // Speedracer: Volume Mute
+	0x21, KBDEXT | X21, // Speedracer: Launch App 2 (Calculator)
+	0x22, KBDEXT | X22, // Speedracer: Media Play/Pause
+	0x24, KBDEXT | X24, // Speedracer: Media Stop
+	0x2E, KBDEXT | X2E, // Speedracer: Volume Down
+	0x30, KBDEXT | X30, // Speedracer: Volume Up
+	0x32, KBDEXT | X32, // Speedracer: Browser Home
+	0x35, KBDEXT | X35, // Numpad Divide
+	0x37, KBDEXT | X37, // Snapshot
+	0x38, KBDEXT | VK_ALTGR,
+	0x46, KBDEXT | X46, // Break (Ctrl + Pause)
+	0x47, KBDEXT | X47, // Home
+	0x48, KBDEXT | X48, // Up
+	0x49, KBDEXT | X49, // Prior
+	0x4B, KBDEXT | X4B, // Left
+	0x4D, KBDEXT | X4D, // Right
+	0x4F, KBDEXT | X4F, // End
+	0x50, KBDEXT | X50, // Down
+	0x51, KBDEXT | X51, // Next
+	0x52, KBDEXT | X52, // Insert
+	0x53, KBDEXT | X53, // Delete
+	0x5B, KBDEXT | X5B, // Left Win
+	0x5C, KBDEXT | X5C, // Right Win
+	0x5D, KBDEXT | X5D, // Application
+	0x5F, KBDEXT | X5F, // Speedracer: Sleep
+	0x65, KBDEXT | X65, // Speedracer: Browser Search
+	0x66, KBDEXT | X66, // Speedracer: Browser Favorites
+	0x67, KBDEXT | X67, // Speedracer: Browser Refresh
+	0x68, KBDEXT | X68, // Speedracer: Browser Stop
+	0x69, KBDEXT | X69, // Speedracer: Browser Forward
+	0x6A, KBDEXT | X6A, // Speedracer: Browser Back
+	0x6B, KBDEXT | X6B, // Speedracer: Launch App 1
+	0x6C, KBDEXT | X6C, // Speedracer: Launch Mail
+	0x6D, KBDEXT | X6D, // Speedracer: Launch Media Selector
 	0
 };
 
 static ALLOC_SECTION_LDATA VSC_VK aE1VscToVk[] = {
-	0x1D, Y1D,  // Pause
+	0x1D, Y1D, // Pause
 	0
 };
 #endif
@@ -150,7 +186,7 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 	VK_SHIFT,       KBDSHIFT,
 	VK_CONTROL,     KBDCTRL,
 	VK_MENU,        KBDALT,
-	VK_OEM_8,       KBDKANA,
+	VK_ALTGR,       KBDKANA,
 //	VK_OEM_FJ_ROYA, KBDROYA,
 //	VK_OEM_FJ_LOYA, KBDLOYA,
 	0
@@ -223,50 +259,47 @@ static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
 *     WCH_LGTR      - Ligature (generates multiple characters)
 *
 \***************************************************************************/
-static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch0[] = {
+static ALLOC_SECTION_LDATA VK_TO_WCHARS1 aVkToWch1[] = {
+	{VK_TAB   , 0, '\t'   },
+	{VK_CANCEL, 0, WCH_ETX},
+	{VK_ESCAPE, 0, WCH_ESC},
+	{}
+ };
+
+static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch2[] = {
 //	                    |     |Shift|
 //	                    |=====|=====|
-	{VK_TAB          , 0, '\t', '\t'},
-	{VK_ADD          , 0,  '+',  '+'},
-	{VK_SUBTRACT     , 0,  '-',  '-'},
-//	{VK_ABNT_C2      , 0,  '.',  '.'},
-//	{VK_SEPARATOR    , 0,  ',',  ','},
-//	{VK_OEM_NEC_EQUAL, 0,  '=',  '='},
-//	{VK_OEM_AUTO     , 0,  '`',  '~'},
-//	{VK_OEM_8        , 0, L'§',  '!'},
+	{VK_OEM_AUTO     , 0,  '`',  '~'},
+	{VK_ABNT_C2      , 0,  '.',  ','},
+	{VK_SEPARATOR    , 0,  ',',  '.'},
+	{VK_OEM_NEC_EQUAL, 0,  '=', L'≠'},
+	{VK_OEM_8        , 0, L'§',  '!'},
+	{}
+ };
+
+static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch3[] = {
+//	             |    |Shift| Control|
+//	             |====|=====|========|
+	{VK_BACK, 0,  '\b', '\b', WCH_DEL},
 	{}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch1[] = {
-//	             |        | Shift  | Control|
-//	             |========|========|========|
-	{VK_CANCEL, 0, WCH_ETX, WCH_ETX, WCH_ETX},
-	{VK_BACK  , 0,  '\b'  ,  '\b'  , WCH_DEL},
-	{VK_ESCAPE, 0, WCH_ESC, WCH_ESC, WCH_ESC},
+static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch4[] = {
+//	              │    │Shft│ Control │ Kana│
+//	              ╞════╪════╪═════════╪═════╡
+	{VK_ABNT_C1, 0, '/', '?', WCH_NONE, L'°'},
 	{}
 };
 
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch2[] = {
-//	             |        | Shift  |Cntrl| Kana  | ↑Kana↑|
-//	             |========|========|=====|=======|=======|
-	{VK_RETURN, 0,  '\r'  , WCH_NEL, '\n', WCH_LS, WCH_PS},
-	{}
-};
-
-static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch3[] = {
-//	                   │    │Shft│ Control │ Kana│               │    │Shft│Ctrl│ Kana│
-//	                   ╞════╪════╪═════════╪═════╡               ╞════╪════╪════╪═════╡
-	{VK_DECIMAL, SGCAPS, '.', ',', ','     , L'…'}, {VK__none_, 0, ',', '.', '.', L'‥'}, // Shift=WCH_DEL, no Caps+Ctrl|Kana
-//	{VK_ABNT_C1, 0     , '/', '?', WCH_NONE, L'°'},
-	{}
-};
-
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch4[] = {
-//	               │    │Shift│ Control │ Kana│↑Kana↑│
-//	               ╞════╪═════╪═════════╪═════╪══════╡
-	{VK_DIVIDE  , 0, '/', L'÷', WCH_NONE, L'∕', L'⁄' },
-	{VK_MULTIPLY, 0, '*', L'×', WCH_NONE, L'⋅', L'⁢'  },
-	{VK_SPACE   , 0, ' ',  ' ',   ' '   , L' ', L' ' },
+static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch5[] = {
+//	               │     │ Shift  │ Control │ Kana  │ ↑Kana↑│
+//	               ╞═════╪════════╪═════════╪═══════╪═══════╡
+	{VK_RETURN  , 0, '\r', WCH_NEL, '\n'    , WCH_LS, WCH_PS},
+	{VK_DIVIDE  , 0,  '/', L'÷'   , WCH_NONE, L'∕'  , L'⁄'  },
+	{VK_MULTIPLY, 0,  '*', L'×'   , WCH_NONE, L'⋅'  , L'⁢'   },
+	{VK_SUBTRACT, 0,  '-', L'−'   , WCH_NONE, L'–'  , L'—'  },
+	{VK_ADD     , 0,  '+',  '+'   , WCH_NONE, L'±'  , L'∓'  },
+	{VK_SPACE   , 0,  ' ',  ' '   ,   ' '   , L' '  , L' '  },
 	{}
 };
 
@@ -275,19 +308,17 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 //	                      ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════════╪═════════╪═════════╪═════════╪══════╡
 	{VK_OEM_3     , 0     ,  '`',  '~', WCH_NONE, L'∀'   , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'°'},
 	{'1'          , SGCAPS,  '1',  '!', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'¹'    , WCH_NONE, WCH_NONE, L'⅟'},
-	{'2'          , SGCAPS,  '2',  '@', WCH_NONE, WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'},
+	{'2'          , SGCAPS,  '2',  '@', L'\0'   , WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'},
 	{'3'          , SGCAPS,  '3',  '#', WCH_NONE, L'§'    , L'⅓'    }, {VK__none_, 0, L'³'    , L'⅓'    },
 	{'4'          , SGCAPS,  '4',  '$', WCH_NONE, L'₽'    , L'€'    }, {VK__none_, 0, L'⁴'    , L'¼'    },
 	{'5'          , SGCAPS,  '5',  '%', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁵'    , L'¾'    , WCH_NONE, L'⅕'},
-	{'6'          , SGCAPS,  '6',  '^', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'},
+	{'6'          , SGCAPS,  '6',  '^', WCH_RS  , WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'},
 	{'7'          , SGCAPS,  '7',  '&', WCH_NONE, WCH_DEAD, L'∏'    }, {VK__none_, 0, L'⁷'    , L'⅞'    , WCH_NONE, L'⅛'},
 	{'8'          , SGCAPS,  '8', L'İ', WCH_NONE, L'ı'    , L'İ'    }, {VK__none_, 0, L'⁸'    , L'⅛'    },
 	{'9'          , SGCAPS,  '9',  '(', WCH_NONE, L'≤'    , L'∃'   }, {VK__none_, 0, L'⁹'    , L'⅜'    },
 	{'0'          , SGCAPS,  '0',  ')', WCH_NONE, L'≥'    , WCH_NONE}, {VK__none_, 0, L'⁰'    , L'⅝'    },
-	{VK_OEM_MINUS , SGCAPS,  '-',  '_', WCH_NONE, L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    },
+	{VK_OEM_MINUS , SGCAPS,  '-',  '_', WCH_US  , L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    },
 	{VK_OEM_PLUS  , 0     ,  '=',  '+', WCH_NONE, WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'´', L'ˇ'},
-	{VK_OEM_4     , SGCAPS,  '[',  '{', WCH_NONE, L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    },
-	{VK_OEM_6     , SGCAPS,  ']',  '}', WCH_ESC , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    },
 	{'Q'          , 0     ,  'q',  'Q', WCH_NONE, L'ä'    , L'Ä'    },
 	{'W'          , 0     ,  'w',  'W', WCH_NONE, L'ś'    , L'Ś'    },
 	{'E'          , 0     ,  'e',  'E', WCH_NONE, L'ě'    , L'Ě'    },
@@ -298,9 +329,9 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'I'          , 0     ,  'i',  'I', WCH_NONE, L'í'    , L'Í'    },
 	{'O'          , 0     ,  'o',  'O', WCH_NONE, L'ô'    , L'Ô'    },
 	{'P'          , 0     ,  'p',  'P', WCH_NONE, L'ś'    , L'Ś'    },
+	{VK_OEM_4     , SGCAPS,  '[',  '{', WCH_ESC , L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    },
+	{VK_OEM_6     , SGCAPS,  ']',  '}', WCH_GS  , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    },
 	{VK_OEM_5     , 0     , '\\',  '|', WCH_FS  , WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'¨', '^'},
-	{VK_OEM_1     , SGCAPS,  ';',  ':', WCH_GS  , L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    },
-	{VK_OEM_7     , SGCAPS, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    },
 	{'A'          , 0     ,  'a',  'A', WCH_NONE, L'á'    , L'Á'    },
 	{'S'          , 0     ,  's',  'S', WCH_NONE, L'š'    , L'Š'    },
 	{'D'          , 0     ,  'd',  'D', WCH_NONE, L'ď'    , L'Ď'    },
@@ -310,8 +341,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'J'          , 0     ,  'j',  'J', WCH_NONE, L'ó'    , L'Ó'    },
 	{'K'          , 0     ,  'k',  'K', WCH_NONE, L'ł'    , L'Ł'    },
 	{'L'          , 0     ,  'l',  'L', WCH_NONE, L'ľ'    , L'Ľ'    },
-	{VK_OEM_1     , 0     ,  ';',  ':', WCH_GS  , L'ż'    , L'Ż'    },
-	{VK_OEM_7     , 0     , '\'', '\"', WCH_NONE, L'é'    , L'É'    },
+	{VK_OEM_1     , SGCAPS,  ';',  ':', WCH_NONE, L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    },
+	{VK_OEM_7     , SGCAPS, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    },
 	{'Z'          , 0     ,  'z',  'Z', WCH_NONE, L'ž'    , L'Ž'    },
 	{'X'          , 0     ,  'x',  'X', WCH_NONE, L'ć'    , L'Ć'    },
 	{'C'          , 0     ,  'c',  'C', WCH_NONE, L'č'    , L'Č'    },
@@ -322,35 +353,36 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{VK_OEM_COMMA , 0     ,  ',',  '<', WCH_NONE, L'μ'    , L'Μ'    },
 	{VK_OEM_PERIOD, 0     ,  '.',  '>', WCH_NONE, L'ú'    , L'Ú'    },
 	{VK_OEM_2     , 0     ,  '/',  '?', WCH_NONE, L'÷'    , L'∕'    },
-	{VK_OEM_102   , 0     , '\\',  '|', WCH_NONE, L'ß'    , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'˝'},
+	{VK_OEM_102   , 0     , '\\',  '|', WCH_FS  , L'ß'    , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'˝'},
 	{}
 };
 
 // Put this last so that VkKeyScan interprets number characters
 // as coming from the main section of the kbd (aVkToWch1 and aVkToWch5)
 // before considering the numpad (aVkToWch6).
-static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchN[] = {
-//	              │    │  Shift  │ Control │  Kana   │ ↑Kana↑  │
-//	              ╞════╪═════════╪═════════╪═════════╪═════════╡
-	{VK_NUMPAD0, 0, '0', WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE},
-	{VK_NUMPAD1, 0, '1', WCH_NONE, WCH_NONE, L'└'    , L'╚'    },
-	{VK_NUMPAD2, 0, '2', WCH_NONE, WCH_NONE, L'─'    , L'═'    },
-	{VK_NUMPAD3, 0, '3', WCH_NONE, WCH_NONE, L'┘'    , L'╝'    },
-	{VK_NUMPAD4, 0, '4', WCH_NONE, WCH_NONE, L'│'    , L'║'    },
-	{VK_NUMPAD5, 0, '5', WCH_NONE, WCH_NONE, L'┼'    , L'╬'    },
-	{VK_NUMPAD6, 0, '6', WCH_NONE, WCH_NONE, L'│'    , L'║'    },
-	{VK_NUMPAD7, 0, '7', WCH_NONE, WCH_NONE, L'┌'    , L'╔'    },
-	{VK_NUMPAD8, 0, '8', WCH_NONE, WCH_NONE, L'─'    , L'═'    },
-	{VK_NUMPAD9, 0, '9', WCH_NONE, WCH_NONE, L'┐'    , L'╗'    },
+static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWchN[] = {
+//	                   │    │ -Shft- │ Control │ Kana    │               │    │ -Shft- │Ctrl│ Kana│
+//	                   ╞════╪════════╪═════════╪═════════╡               ╞════╪════════╪════╪═════╡
+	{VK_DECIMAL, SGCAPS, ',', WCH_DEL, '.'     , L'…'    }, {VK__none_, 0, '.', WCH_DEL, ',', L'‥'},
+	{VK_NUMPAD0, 0     , '0', L'Ⅹ'	 , WCH_NONE, WCH_NONE}, //                  Ins
+	{VK_NUMPAD1, 0     , '1', L'Ⅰ'	 , WCH_NONE, L'└'    }, //              ╚   End
+	{VK_NUMPAD2, 0     , '2', L'Ⅱ'	 , WCH_NONE, L'─'    }, //              ═   ↓
+	{VK_NUMPAD3, 0     , '3', L'Ⅲ'	 , WCH_NONE, L'┘'    }, //              ╝   Page↓
+	{VK_NUMPAD4, 0     , '4', L'Ⅳ'	 , WCH_NONE, L'│'    }, //              ║   ←
+	{VK_NUMPAD5, 0     , '5', L'Ⅴ'	 , WCH_NONE, L'┼'    }, //              ╬   Clear
+  	{VK_NUMPAD6, 0     , '6', L'Ⅵ'	 , WCH_NONE, L'│'    }, //              ║   →
+	{VK_NUMPAD7, 0     , '7', L'Ⅶ'	 , WCH_NONE, L'┌'    }, //              ╔   Home
+	{VK_NUMPAD8, 0     , '8', L'Ⅷ'	 , WCH_NONE, L'─'    }, //              ═   ↑
+	{VK_NUMPAD9, 0     , '9', L'Ⅸ'	 , WCH_NONE, L'┐'    }, //              ╗   Page↑
 	{}
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
-	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch0),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch1),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch2),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch3),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch4),
+	VK_TO_WCHAR_TABLE_ENTRY(aVkToWch5),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWchT),
 	VK_TO_WCHAR_TABLE_ENTRY(aVkToWchN),
 	NULL
@@ -401,7 +433,7 @@ static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNames[] = {
 	0x50, L"Num 2",
 	0x51, L"Num 3",
 	0x52, L"Num 0",
-	0x53, L"Num Del",
+	0x53, L"Num .",
 	0x54, L"Sys Req",
 	0x57, L"F11",
 	0x58, L"F12",
@@ -425,7 +457,7 @@ static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNamesExt[] = {
 	0x1d, L"Правый Ctrl",
 	0x35, L"Num /",
 	0x37, L"Prnt Scrn",
-	0x38, L"Kana",
+	0x38, L"AltGr",
 	0x45, L"Num Lock",
 	0x46, L"Break",
 	0x47, L"Home",
@@ -536,6 +568,8 @@ static ALLOC_SECTION_LDATA DEADKEY aDeadKey[] = {
 	DEADTRANS(L'U', L'°', L'Ů', 0),
 	DEADTRANS(L'a', L'°', L'å', 0),
 	DEADTRANS(L'u', L'°', L'ů', 0),
+	DEADTRANS(L'w', L'°', L'ẘ', 0),
+	DEADTRANS(L'y', L'°', L'ẙ', 0),
 
 	DEADTRANS(L' ', L'¨', L'¨', 0),
 	DEADTRANS(L'A', L'¨', L'Ä', 0),
@@ -562,14 +596,6 @@ static ALLOC_SECTION_LDATA DEADKEY aDeadKey[] = {
 	DEADTRANS(L'i', L'^', L'î', 0),
 	DEADTRANS(L'o', L'^', L'ô', 0),
 	DEADTRANS(L'u', L'^', L'û', 0),
-
-	DEADTRANS(L' ', L'°', L'°', 0),
-	DEADTRANS(L'A', L'°', L'Å', 0),
-	DEADTRANS(L'a', L'°', L'å', 0),
-	DEADTRANS(L'U', L'°', L'Ů', 0),
-	DEADTRANS(L'u', L'°', L'ů', 0),
-	DEADTRANS(L'w', L'°', L'ẘ', 0),
-	DEADTRANS(L'y', L'°', L'ẙ', 0),
 
 	DEADTRANS(L' ', L'˝', L'˝', 0),
 	DEADTRANS(L'O', L'˝', L'Ő', 0),
