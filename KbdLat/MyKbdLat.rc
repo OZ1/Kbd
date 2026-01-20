@@ -18,7 +18,7 @@ BEGIN
        BLOCK "041904B0"
        BEGIN
            VALUE "CompanyName",      "ОЗонъ"
-           VALUE "LegalCopyright",   "©2014-2025 ОЗонъ"
+           VALUE "LegalCopyright",   "©2014-2026 ОЗонъ"
            VALUE "FileDescription",  "Латинская разкладка"
            VALUE "ProductName",      "Разкладка клавіатуры"
            VALUE "OriginalFilename", VER_ORIGINALFILENAME_STR

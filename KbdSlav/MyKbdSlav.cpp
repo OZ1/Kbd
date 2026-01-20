@@ -318,7 +318,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'9'          , SGCAPS,  '(',  '<', WCH_NONE, L'҃'    , L'≤'    }, {VK__none_, 0,  '9',  '('},
 	{'0'          , SGCAPS,  ')',  '>', WCH_NONE, L'҂'    , L'≥'    }, {VK__none_, 0,  '0',  ')'},
 	{VK_OEM_MINUS , SGCAPS,  '-', L'−', WCH_US  , L'­'     , L'—'    }, {VK__none_, 0,  '-',  '_'},
-	{VK_OEM_PLUS  , SGCAPS,  '=', L'≠', WCH_NONE, L'≈'    , L'≡'    }, {VK__none_, 0,  '=',  '+'},
+	{VK_OEM_PLUS  , SGCAPS,  '=', L'≈', WCH_NONE, L'≠'    , L'≡'    }, {VK__none_, 0,  '=',  '+'},
 	{'Q'          , SGCAPS, L'й', L'Й', WCH_NONE, L'ј'    , L'Ј'    }, {VK__none_, 0,  'q',  'Q'},
 	{'W'          , SGCAPS, L'ц', L'Ц', WCH_NONE, L'џ'    , L'Џ'    }, {VK__none_, 0,  'w',  'W'},
 	{'E'          , SGCAPS, L'у', L'У', WCH_NONE, L'ѫ'    , L'Ѫ'    }, {VK__none_, 0,  'e',  'E'},

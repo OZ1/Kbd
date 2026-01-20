@@ -1,8 +1,8 @@
 ﻿#include <WinVer.h>
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     3,0,0,71
-PRODUCTVERSION  3,0,0,0
+FILEVERSION     3,1,0,2
+PRODUCTVERSION  3,1,0,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
 FILEFLAGS       VS_FF_DEBUG
@@ -18,12 +18,12 @@ BEGIN
        BLOCK "041904B0"
        BEGIN
            VALUE "CompanyName",      "ОЗонъ"
-           VALUE "LegalCopyright",   "©2014-2025 ОЗонъ"
+           VALUE "LegalCopyright",   "©2014-2026 ОЗонъ"
            VALUE "FileDescription",  "Славянская разкладка"
            VALUE "ProductName",      "Разкладка клавіатуры"
            VALUE "OriginalFilename", VER_ORIGINALFILENAME_STR
            VALUE "InternalName",     VER_INTERNALNAME_STR
-           VALUE "ProductVersion",   "3"
+           VALUE "ProductVersion",   "3.1"
        END
    END
    BLOCK "VarFileInfo"
