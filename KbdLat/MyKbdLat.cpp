@@ -1,4 +1,4 @@
-#define KBD_TYPE KEYBOARD_TYPE_GENERIC_101
+﻿#define KBD_TYPE KEYBOARD_TYPE_GENERIC_101
 
 #include <Windows.h>
 #include <kbd.h>
