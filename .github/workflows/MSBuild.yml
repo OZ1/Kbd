@@ -1,0 +1,154 @@
+name: Сборка
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  # Версія каждой разкладки. Прежняя — наибольшій тегъ Kbd<Lang>-a.b.c.d (ставитъ publish).
+  # Папка разкладки (кромѣ картинокъ) съ того тега не мѣнялась — версія прежняя, тегъ не ставится.
+  # Иначе: FILEVERSION изъ MyKbd*.rc новѣе прежней — берётся онъ; нѣтъ — прежняя a.b.c.d → a.b+1.c.d+1.
+  # Релизъ — только если съ послѣдняго тега измѣнилась разкладка, Install-Kbd.ps1 или Kbd.cmd;
+  # правки README и прочаго релиза не даютъ.
+  # Въ репозиторій ничего не коммитится: повышенная версія живётъ только въ сборкѣ и въ тегѣ.
+  version:
+    runs-on: windows-latest
+    outputs:
+      slav:    ${{ steps.v.outputs.slav }}
+      slavpv:  ${{ steps.v.outputs.slavpv }}
+      slavtag: ${{ steps.v.outputs.slavtag }}
+      lat:     ${{ steps.v.outputs.lat }}
+      latpv:   ${{ steps.v.outputs.latpv }}
+      lattag:  ${{ steps.v.outputs.lattag }}
+      release: ${{ steps.v.outputs.release }}
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0          # вся исторія и теги — для сравненія съ прежнимъ тегомъ
+    - id: v
+      shell: pwsh
+      run: |
+        function Test-Changed([string] $since, [string[]] $paths) {
+            if (-not $since) { return $true }
+            git diff --quiet $since HEAD -- $paths ':!*.png' ':!*.jpg'
+            [bool]$LASTEXITCODE
+        }
+        $release = $false
+        foreach ($l in @{ slav = 'KbdSlav\MyKbdSlav.RC'; lat = 'KbdLat\MyKbdLat.rc' }.GetEnumerator()) {
+            $name = Split-Path (Split-Path $l.Value) -Leaf
+            $t    = [IO.File]::ReadAllText($l.Value)
+            $rc   = [version]([regex]::Match($t, '(?m)^\s*FILEVERSION\s+([\d, ]+)').Groups[1].Value -replace '\s' -replace ',', '.')
+            $prev = git tag -l "$name-*" | ForEach-Object { $_.Substring($name.Length + 1) -as [version] } |
+                    Where-Object { $_ } | Sort-Object | Select-Object -Last 1
+            $prevTag = if ($prev) { "$name-$prev" }
+            $tag = $true
+            if (-not (Test-Changed $prevTag $name)) {
+                $fv  = $prev
+                $pv  = "$($fv.Major).$($fv.Minor)"
+                $how = "не мѣнялась съ $prevTag"
+                $tag = $false
+            } elseif ($prev -and $rc -le $prev) {
+                $fv  = [version]::new($prev.Major, $prev.Minor + 1, $prev.Build, $prev.Revision + 1)
+                $pv  = "$($fv.Major).$($fv.Minor)"
+                $how = "повышена отъ $prevTag"
+            } else {
+                $fv  = $rc
+                $pv  = [regex]::Match($t, '"ProductVersion",\s*"([^"]+)"').Groups[1].Value
+                $how = if ($prev) { "изъ .rc, новѣе $prevTag" } else { 'изъ .rc, тегов нѣтъ' }
+            }
+            if ($tag) { $release = $true }
+            "${name}: $fv ($pv) — $how"
+            "$($l.Key)=$fv"      >> $env:GITHUB_OUTPUT
+            "$($l.Key)pv=$pv"    >> $env:GITHUB_OUTPUT
+            "$($l.Key)tag=$tag"  >> $env:GITHUB_OUTPUT
+        }
+        # Скриптъ установки идётъ въ архивъ: его правка — тоже поводъ для релиза
+        $last = git tag -l 'Kbd*-*' --sort=-creatordate | Select-Object -First 1
+        if (Test-Changed $last 'Install-Kbd.ps1', 'Kbd.cmd') { $release = $true; "Install-Kbd.ps1 / Kbd.cmd измѣнились съ $last" }
+        "release=$($release.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+        if (-not $release) { 'Исходники съ послѣдняго релиза не мѣнялись — релиза не будетъ' }
+        # Иначе Actions выйдетъ съ $LASTEXITCODE послѣдняго git diff --quiet (1 = есть измѣненія)
+        exit 0
+  build:
+    needs: version
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        lang: [Slav, Lat]
+        platform: [x64, Win32, ARM64]
+    steps:
+    - uses: actions/checkout@v7
+    - uses: microsoft/setup-msbuild@v3
+    # Версію изъ job version — въ .rc рабочей копіи (только для этой сборки)
+    - shell: pwsh
+      env:
+        FV: ${{ matrix.lang == 'Slav' && needs.version.outputs.slav   || needs.version.outputs.lat   }}
+        PV: ${{ matrix.lang == 'Slav' && needs.version.outputs.slavpv || needs.version.outputs.latpv }}
+      run: |
+        $p = 'Kbd${{matrix.lang}}\MyKbd${{matrix.lang}}.rc'
+        $v = [version]$env:FV
+        $t = [IO.File]::ReadAllText($p)
+        $t = [regex]::Replace($t, '(?m)^(\s*FILEVERSION\s+)\d[\d, ]*\d',    { param($m) $m.Groups[1].Value + "$($v.Major),$($v.Minor),$($v.Build),$($v.Revision)" })
+        $t = [regex]::Replace($t, '(?m)^(\s*PRODUCTVERSION\s+)\d[\d, ]*\d', { param($m) $m.Groups[1].Value + "$($v.Major),$($v.Minor),0,0" })
+        $t = [regex]::Replace($t, '("ProductVersion",\s*")[^"]*"',          { param($m) $m.Groups[1].Value + $env:PV + '"' })
+        [IO.File]::WriteAllText($p, $t, [Text.UTF8Encoding]::new($true))
+        Select-String -Path $p -Pattern 'VERSION' | ForEach-Object Line
+    - run: msbuild Kbd${{matrix.lang}}/Kbd${{matrix.lang}}.vcxproj /m /p:Configuration=Release /p:Platform=${{matrix.platform}}
+    - uses: actions/upload-artifact@v7.0.1
+      with:
+        name: ${{matrix.platform}}-Kbd${{matrix.lang}}
+        path: Kbd${{matrix.lang}}\bin\out\Release-${{matrix.platform}}-Kbd${{matrix.lang}}\Kbd${{matrix.lang}}.dll
+        if-no-files-found: error
+
+  # Два архива (amd64, arm64): родная сборка въ System32, 32-битная въ SysWOW64, плюсъ скриптъ установки.
+  # 32-битной Windows архива нѣтъ: Win32-сборка идётъ съ BUILD_WOW6432 и годна только для SysWOW64.
+  # Релизъ v<ProductVersion KbdSlav>; если онъ уже есть, архивы въ нёмъ замѣняются.
+  # Затѣмъ теги KbdSlav-<версія> и KbdLat-<версія> — по нимъ слѣдующая сборка узнаётъ прежнюю версію.
+  publish:
+    needs: [version, build]
+    if: github.event_name == 'push' && needs.version.outputs.release == 'true'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/download-artifact@v8.0.1
+      with:
+        path: out
+    - shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        $zips = foreach ($z in @{ amd64 = 'x64'; arm64 = 'ARM64' }.GetEnumerator()) {
+            $d = "pkg\$($z.Key)"
+            New-Item -ItemType Directory "$d\System32", "$d\SysWOW64" | Out-Null
+            Copy-Item "out\$($z.Value)-*\*.dll" "$d\System32\"
+            Copy-Item "out\Win32-*\*.dll" "$d\SysWOW64\"
+            Copy-Item Install-Kbd.ps1, Kbd.cmd $d
+            Compress-Archive "$d\*" "Kbd-$($z.Key).zip"
+            "Kbd-$($z.Key).zip"
+        }
+        $tag   = 'v${{ needs.version.outputs.slavpv }}'
+        $notes = "${{ needs.version.outputs.slav }} KbdSlav`n`n" +
+                 "${{ needs.version.outputs.lat }} KbdLat"
+        gh release view $tag 2>$null
+        if ($LASTEXITCODE) {
+            gh release create $tag $zips --target '${{ github.sha }}' --title $tag --notes $notes
+        } else {
+            gh release upload $tag $zips --clobber
+            gh release edit $tag --notes $notes
+        }
+        # Теги версій — только измѣнившимся разкладкамъ
+        $vt = @()
+        if ('${{ needs.version.outputs.slavtag }}' -eq 'True') { $vt += 'KbdSlav-${{ needs.version.outputs.slav }}' }
+        if ('${{ needs.version.outputs.lattag }}'  -eq 'True') { $vt += 'KbdLat-${{ needs.version.outputs.lat }}' }
+        foreach ($x in $vt) { git tag $x '${{ github.sha }}' }
+        if ($vt) { git push origin $vt }
