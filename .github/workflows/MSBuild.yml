@@ -70,9 +70,9 @@ jobs:
             "$($l.Key)pv=$pv"    >> $env:GITHUB_OUTPUT
             "$($l.Key)tag=$tag"  >> $env:GITHUB_OUTPUT
         }
-        # Скриптъ установки идётъ въ архивъ: его правка — тоже поводъ для релиза
+        # Скриптъ установки идётъ въ архивъ, Setup — въ MSI: ихъ правка — тоже поводъ для релиза
         $last = git tag -l 'Kbd*-*' --sort=-creatordate | Select-Object -First 1
-        if (Test-Changed $last 'Install-Kbd.ps1', 'Kbd.cmd') { $release = $true; "Install-Kbd.ps1 / Kbd.cmd измѣнились съ $last" }
+        if (Test-Changed $last 'Install-Kbd.ps1', 'Kbd.cmd', 'Setup') { $release = $true; "Install-Kbd.ps1 / Kbd.cmd / Setup измѣнились съ $last" }
         "release=$($release.ToString().ToLower())" >> $env:GITHUB_OUTPUT
         if (-not $release) { 'Исходники съ послѣдняго релиза не мѣнялись — релиза не будетъ' }
         # Иначе Actions выйдетъ съ $LASTEXITCODE послѣдняго git diff --quiet (1 = есть измѣненія)
@@ -104,11 +104,12 @@ jobs:
     - run: msbuild Kbd${{matrix.lang}}/Kbd${{matrix.lang}}.vcxproj /m /p:Configuration=Release /p:Platform=${{matrix.platform}}
     - uses: actions/upload-artifact@v7.0.1
       with:
-        name: ${{matrix.platform}}-Kbd${{matrix.lang}}
+        name: Kbd${{matrix.lang}} ${{matrix.platform}}
         path: Kbd${{matrix.lang}}\bin\out\Release-${{matrix.platform}}-Kbd${{matrix.lang}}\Kbd${{matrix.lang}}.dll
         if-no-files-found: error
 
   # Два архива (amd64, arm64): родная сборка въ System32, 32-битная въ SysWOW64, плюсъ скриптъ установки.
+  # Плюсъ по MSI на разкладку (Setup\<Name>.wixproj): <Name>.msi — одинъ на x64 и ARM64, и <Name>-amd64.msi, <Name>-arm64.msi — по одной родной dll.
   # 32-битной Windows архива нѣтъ: Win32-сборка идётъ съ BUILD_WOW6432 и годна только для SysWOW64.
   # Релизъ v<ProductVersion KbdSlav>; если онъ уже есть, архивы въ нёмъ замѣняются.
   # Затѣмъ теги KbdSlav-<версія> и KbdLat-<версія> — по нимъ слѣдующая сборка узнаётъ прежнюю версію.
@@ -127,23 +128,52 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        $zips = foreach ($z in @{ amd64 = 'x64'; arm64 = 'ARM64' }.GetEnumerator()) {
+        $files = foreach ($z in @{ amd64 = 'x64'; arm64 = 'ARM64' }.GetEnumerator()) {
             $d = "pkg\$($z.Key)"
             New-Item -ItemType Directory "$d\System32", "$d\SysWOW64" | Out-Null
-            Copy-Item "out\$($z.Value)-*\*.dll" "$d\System32\"
-            Copy-Item "out\Win32-*\*.dll" "$d\SysWOW64\"
+            Copy-Item "out\* $($z.Value)\*.dll" "$d\System32\"
+            Copy-Item "out\* Win32\*.dll" "$d\SysWOW64\"
             Copy-Item Install-Kbd.ps1, Kbd.cmd $d
             Compress-Archive "$d\*" "Kbd-$($z.Key).zip"
             "Kbd-$($z.Key).zip"
+        }
+        # Общій MSI (<Name>.msi) и по одному на архитектуру (<Name>-amd64.msi, <Name>-arm64.msi)
+        foreach ($n in 'KbdSlav', 'KbdLat') {
+            foreach ($a in '', 'amd64', 'arm64') {
+                $arch = if ($a) { "-p:Arch=$a" }
+                $out  = if ($a) { "$n-$a" } else { $n }
+                dotnet build Setup\$n.wixproj -c Release -p:DllDir="$PWD\out" $arch -nologo | Out-Host
+                if ($LASTEXITCODE) { exit 1 }
+                Copy-Item "Setup\bin\x64\Release\$out.msi" .
+                $files += "$out.msi"
+            }
+        }
+        # Pages (ветка gh-pages): ссылки для Microsoft Store — прямыя, безъ редиректа, съ версіей въ адресѣ:
+        #   https://oz1.github.io/Kbd/<Name>/<a.b.c.d>/<Name>[-amd64|-arm64].msi
+        # Уже выложенную версію не перезаписываемъ: Store требуетъ, чтобы файлъ по ссылкѣ не мѣнялся.
+        git fetch origin gh-pages
+        git worktree add pages -B gh-pages origin/gh-pages
+        foreach ($x in @('KbdSlav', '${{ needs.version.outputs.slav }}'), @('KbdLat', '${{ needs.version.outputs.lat }}')) {
+            $d = "pages\$($x[0])\$($x[1])"
+            if (-not (Test-Path $d)) {
+                New-Item -ItemType Directory $d | Out-Null
+                Copy-Item "$($x[0])*.msi" $d
+            }
+        }
+        git -C pages add -A
+        git -C pages diff --cached --quiet
+        if ($LASTEXITCODE) {
+            git -C pages -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -m 'MSI ${{ needs.version.outputs.slavpv }}'
+            git -C pages push origin gh-pages
         }
         $tag   = 'v${{ needs.version.outputs.slavpv }}'
         $notes = "${{ needs.version.outputs.slav }} KbdSlav`n`n" +
                  "${{ needs.version.outputs.lat }} KbdLat"
         gh release view $tag 2>$null
         if ($LASTEXITCODE) {
-            gh release create $tag $zips --target '${{ github.sha }}' --title $tag --notes $notes
+            gh release create $tag $files --target '${{ github.sha }}' --title $tag --notes $notes
         } else {
-            gh release upload $tag $zips --clobber
+            gh release upload $tag $files --clobber
             gh release edit $tag --notes $notes
         }
         # Теги версій — только измѣнившимся разкладкамъ

@@ -1,0 +1,53 @@
+<!--
+  Общее для KbdSlav.wixproj и KbdLat.wixproj: каждая разкладка — свой MSI изъ Kbd.wxs,
+  одинъ на x64 и ARM64 (пакетъ x64, нужная dll выбирается при установкѣ).
+    dotnet build Setup\KbdSlav.wixproj -c Release
+  Выходъ: Setup\bin\x64\Release\<Name>.msi
+
+  Откуда берутся dll (нужны всѣ три сборки: x64, ARM64, Win32):
+    по умолчанію — изъ сборки рѣшенія: bin\out\Release-<Platform>-<Name>\<Name>.dll
+    -p:DllDir=<папка> — какъ артефакты CI: <папка>\<Name> <Platform>\<Name>.dll
+-->
+<Project InitialTargets="CheckPlatform">
+  <PropertyGroup>
+    <Layout>$(MSBuildProjectName)</Layout>
+    <!-- Проекты въ одной папкѣ: obj у каждаго свой (NuGet и WiX), иначе мѣшаютъ другъ другу -->
+    <ArchSuffix Condition="'$(Arch)' != ''">-$(Arch)</ArchSuffix>
+    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)$(ArchSuffix)\</BaseIntermediateOutputPath>
+    <Platform Condition="'$(Platform)' == ''">x64</Platform>
+    <OutputName>$(Layout)$(ArchSuffix)</OutputName>
+    <Cultures>ru-RU</Cultures>
+    <!-- ICE09: dll въ System32 удаляются вмѣстѣ съ разкладкою — такъ и надо;
+         ICE30: x64- и ARM64-dll ложатся въ одно мѣсто, но по взаимоисключающимъ условіямъ;
+         ICE61: обновленіе и при той же версіи (AllowSameVersionUpgrades) -->
+    <SuppressIces>ICE09;ICE30;ICE61</SuppressIces>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(DllDir)' == ''">
+    <DllX64>$(MSBuildThisFileDirectory)..\bin\out\Release-x64-$(Layout)\$(Layout).dll</DllX64>
+    <DllArm64>$(MSBuildThisFileDirectory)..\bin\out\Release-ARM64-$(Layout)\$(Layout).dll</DllArm64>
+    <DllWow>$(MSBuildThisFileDirectory)..\bin\out\Release-Win32-$(Layout)\$(Layout).dll</DllWow>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DllDir)' != ''">
+    <DllX64>$(DllDir)\$(Layout) x64\$(Layout).dll</DllX64>
+    <DllArm64>$(DllDir)\$(Layout) ARM64\$(Layout).dll</DllArm64>
+    <DllWow>$(DllDir)\$(Layout) Win32\$(Layout).dll</DllWow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>Layout=$(Layout);X64Dll=$(DllX64);Arm64Dll=$(DllArm64);WowDll=$(DllWow)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Arch)' != ''">
+    <DefineConstants>$(DefineConstants);Arch=$(Arch)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Kbd.wxs" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
+  </ItemGroup>
+
+  <Target Name="CheckPlatform" Condition="'$(Platform)' != 'x64'">
+    <Error Text="Пакетъ одинъ на x64 и ARM64 и собирается только съ Platform=x64, а не $(Platform)" />
+  </Target>
+</Project>

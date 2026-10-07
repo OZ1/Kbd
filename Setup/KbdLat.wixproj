@@ -1,0 +1,2 @@
+<!-- MSI разкладки KbdLat; всё общее — въ Directory.Build.props и Kbd.wxs -->
+<Project Sdk="WixToolset.Sdk/5.0.2" />

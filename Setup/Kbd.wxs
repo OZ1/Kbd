@@ -1,0 +1,163 @@
+<!--
+  MSI одной разкладки ($(Layout) = KbdSlav или KbdLat) — то же, что Install-Kbd.ps1 -Install <Name>,
+  но средствами Windows Installer:
+    <Name>.dll родной сборки → System32, 32-битной → SysWOW64
+    Пакетъ одинъ на x64 и ARM64: самъ онъ x64 (Windows 11 на ARM64 ставитъ такіе), а какую dll класть
+    въ System32, рѣшаетъ PROCESSOR_ARCHITECTURE изъ реестра — тамъ настоящая архитектура машины,
+    а не та, что видитъ эмулируемый процессъ.
+    HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\<KLID> — KLID и Layout Id постоянные
+      (скриптъ беретъ первые свободные; на чистой сѵстемѣ выходятъ тѣ же)
+    послѣ установки разкладка добавляется къ языку текущаго пользователя, при удаленіи — убирается
+      (NOLANGBAR=1 — не трогать списокъ языковъ, какъ -NoLangBar у скрипта)
+  Прежнюю установку этой разкладки скриптомъ (запись Kbd_<Name> въ «Установленныхъ приложеніяхъ»)
+  MSI убираетъ: dll и реестръ разкладки онъ пишетъ поверхъ. Самъ скриптъ
+  %ProgramFiles%\KbdLayouts\Install-Kbd.ps1 стирается, только если другая разкладка скриптомъ не стоитъ.
+
+  Строки въ MSI — въ кодировкѣ 1251, а въ ней нѣтъ ни ѣ, ни ударенія, ни á: отсюда «Азбука» и «Latinska»
+  въ Layout Text. Windows показываетъ Layout Display Name — строку 1000 изъ самой dll, гдѣ имя полное.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+  <?if $(Layout) = "KbdSlav"?>
+    <?define Klid        = "a0000419"?>
+    <?define LayoutId    = "00c0"?>
+    <?define LayoutText  = "Азбука"?>
+    <?define Title       = "Славянская раскладка"?>
+    <?define Lang        = "ru"?>
+    <?define Tag         = "ru-RU"?>
+    <?define Tip         = "0419:A0000419"?>
+    <?define Other       = "KbdLat"?>
+    <?define Maker       = "ОЗонъ"?>
+    <?define UpgradeCode = "5991AD3B-BAFA-485D-97F4-0B700E2C814E"?>
+    <?define X64Guid     = "ADBB41D8-4BE9-48B5-A1C8-5743A095A2FB"?>
+    <?define Arm64Guid   = "BDDD1A98-BE87-461A-A50D-6CC6837DA3A1"?>
+  <?elseif $(Layout) = "KbdLat"?>
+    <?define Klid        = "a0000409"?>
+    <?define LayoutId    = "00c1"?>
+    <?define LayoutText  = "Latinska"?>
+    <?define Title       = "Латиница (раскладка)"?>
+    <?define Lang        = "en"?>
+    <?define Tag         = "en-US"?>
+    <?define Tip         = "0409:A0000409"?>
+    <?define Other       = "KbdSlav"?>
+    <?define Maker       = "OZone"?>
+    <?define UpgradeCode = "5D74337E-DC23-4F10-BF4E-A81A7E692128"?>
+    <?define X64Guid     = "6BD0719F-50AF-4E29-BD34-F054EF7331D5"?>
+    <?define Arm64Guid   = "53881383-C059-488E-8772-FF340B5DE455"?>
+  <?else?>
+    <?error Layout должна быть KbdSlav или KbdLat ?>
+  <?endif?>
+  <!-- Arch (amd64 | arm64) задаётъ -p:Arch= : MSI только съ одною родною dll; безъ него — общій MSI на обѣ -->
+  <?ifdef Arch?>
+    <?if $(Arch) = "amd64"?>
+      <?define VerFile = "X64Dll"?>
+      <?define Need    = "AMD64"?>
+      <?define IncX64  = "1"?>
+      <?define IncArm  = "0"?>
+    <?elseif $(Arch) = "arm64"?>
+      <?define VerFile = "Arm64Dll"?>
+      <?define Need    = "ARM64"?>
+      <?define IncX64  = "0"?>
+      <?define IncArm  = "1"?>
+    <?else?>
+      <?error Arch должна быть amd64 или arm64 ?>
+    <?endif?>
+  <?else?>
+    <?define VerFile = "X64Dll"?>
+    <?define IncX64  = "1"?>
+    <?define IncArm  = "1"?>
+  <?endif?>
+  <?define Uninst = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"?>
+  <?define PS     = "powershell -NoP -C"?>  <!-- Target въ CustomAction — не длиннѣе 255 знаковъ -->
+
+  <!-- Въ версіи MSI только три числа: при той же a.b.c (новая сборка, старшій номеръ dll) — тоже обновленіе -->
+  <Package Name="$(Title) ($(Layout))" Manufacturer="$(Maker)" Version="!(bind.FileVersion.$(VerFile))"
+           UpgradeCode="$(UpgradeCode)" Language="1049" Codepage="1251" Scope="perMachine">
+    <SummaryInformation Codepage="1251" Description="$(Title) ($(Layout))" />
+    <MajorUpgrade Schedule="afterInstallExecute" AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="Уже установлена версія старше этой." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/OZ1/Kbd" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <!-- Настоящая архитектура машины: AMD64 или ARM64 -->
+    <Property Id="NATIVEARCH">
+      <RegistrySearch Root="HKLM" Key="SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+                      Name="PROCESSOR_ARCHITECTURE" Type="raw" Bitness="always64" />
+    </Property>
+    <?ifdef Need?>
+      <Launch Condition="Installed OR NATIVEARCH=&quot;$(Need)&quot;"
+              Message="Этотъ пакетъ для $(Need). Для другой архитектуры возьми другой MSI." />
+    <?else?>
+      <Launch Condition="Installed OR NATIVEARCH=&quot;AMD64&quot; OR NATIVEARCH=&quot;ARM64&quot;"
+              Message="Нужна 64-битная Windows: x64 или ARM64." />
+    <?endif?>
+
+    <!-- Другая разкладка стоитъ скриптомъ — ему нуженъ Install-Kbd.ps1 для удаленія -->
+    <Property Id="OTHERSCRIPT">
+      <RegistrySearch Root="HKLM" Key="$(Uninst)\Kbd_$(Other)" Name="UninstallString" Type="raw" Bitness="always64" />
+    </Property>
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="ScriptDir" Name="KbdLayouts" />
+    </StandardDirectory>
+
+    <Feature Id="Layout" Title="$(Title)">
+      <!-- Одинъ и тотъ же System32\<Name>.dll, поэтому GUID явные: автоматическій вышелъ бы общимъ -->
+      <?if $(IncX64) = "1"?>
+      <Component Id="X64Dll" Directory="System64Folder" Guid="$(X64Guid)" Condition="NATIVEARCH=&quot;AMD64&quot;">
+        <File Id="X64Dll" Source="$(X64Dll)" />
+      </Component>
+      <?endif?>
+      <?if $(IncArm) = "1"?>
+      <Component Id="Arm64Dll" Directory="System64Folder" Guid="$(Arm64Guid)" Condition="NATIVEARCH=&quot;ARM64&quot;">
+        <File Id="Arm64Dll" Source="$(Arm64Dll)" />
+      </Component>
+      <?endif?>
+      <Component Directory="SystemFolder" Bitness="always32">
+        <File Id="WowDll" Source="$(WowDll)" />
+      </Component>
+      <Component Directory="System64Folder">
+        <RegistryKey Root="HKLM" Key="SYSTEM\CurrentControlSet\Control\Keyboard Layouts\$(Klid)" ForceDeleteOnUninstall="yes">
+          <RegistryValue Name="Layout File" Value="$(Layout).dll" Type="string" KeyPath="yes" />
+          <RegistryValue Name="Layout Text" Value="$(LayoutText)" Type="string" />
+          <RegistryValue Name="Layout Display Name" Value="@%SystemRoot%\system32\$(Layout).dll,-1000" Type="expandable" />
+          <RegistryValue Name="Layout Id" Value="$(LayoutId)" Type="string" />
+        </RegistryKey>
+        <RemoveRegistryKey Root="HKLM" Key="$(Uninst)\Kbd_$(Layout)" Action="removeOnInstall" />
+      </Component>
+      <Component Id="OldScript" Directory="ScriptDir" Guid="" Condition="NOT OTHERSCRIPT">  <!-- только стираетъ: безъ GUID, не отслѣживается -->
+        <RemoveFile Id="OldScript" Name="Install-Kbd.ps1" On="install" />
+        <RemoveFolder Id="OldScriptDir" On="install" />
+      </Component>
+    </Feature>
+
+    <!--
+      Списокъ языковъ — свой у каждаго пользователя (HKCU), поэтому не deferred-дѣйствіе отъ SYSTEM,
+      а immediate послѣ InstallFinalize: оно идётъ отъ имени того, кто ставитъ.
+      WixQuietExec въ режимѣ immediate беретъ командную строку изъ свойства WixQuietExecCmdLine.
+      Разкладка уже есть въ спискѣ — ничего не дѣлается; иначе идётъ къ первому языку своей группы (ru, ru-RU…),
+      а нѣтъ такого — добавляется и языкъ.
+      Добавляется только при первой установкѣ (не при обновленіи и не при починкѣ),
+      убирается только при настоящемъ удаленіи (не при обновленіи).
+      Ошибка здѣсь установку не валитъ.
+    -->
+    <SetProperty Action="SetAddTip" Id="WixQuietExecCmdLine" Sequence="execute" After="InstallFinalize"
+                 Condition="NOT Installed AND NOT WIX_UPGRADE_DETECTED AND NOT NOLANGBAR"
+                 Value="$(PS) &quot;$l=Get-WinUserLanguageList;if(!($l.InputMethodTips-eq'$(Tip)')){$g=$l|?{$_.LanguageTag-like'$(Lang)*'}|select -f 1;if(!$g){$l.Add('$(Tag)');$g=$l|select -l 1};$g.InputMethodTips.Add('$(Tip)');Set-WinUserLanguageList $l -F}&quot;" />
+    <CustomAction Id="AddTip" DllEntry="WixQuietExec" Execute="immediate" Return="ignore"
+                  BinaryRef="Wix4UtilCA_$(sys.BUILDARCHSHORT)" />
+    <SetProperty Action="SetRemoveTip" Id="WixQuietExecCmdLine" Sequence="execute" After="AddTip"
+                 Condition="REMOVE=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE AND NOT NOLANGBAR"
+                 Value="$(PS) &quot;$l=Get-WinUserLanguageList;foreach($x in $l){$null=$x.InputMethodTips.Remove('$(Tip)')};Set-WinUserLanguageList $l -Force&quot;" />
+    <CustomAction Id="RemoveTip" DllEntry="WixQuietExec" Execute="immediate" Return="ignore"
+                  BinaryRef="Wix4UtilCA_$(sys.BUILDARCHSHORT)" />
+    <InstallExecuteSequence>
+      <Custom Action="AddTip" After="SetAddTip"
+              Condition="NOT Installed AND NOT WIX_UPGRADE_DETECTED AND NOT NOLANGBAR" />
+      <Custom Action="RemoveTip" After="SetRemoveTip"
+              Condition="REMOVE=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE AND NOT NOLANGBAR" />
+    </InstallExecuteSequence>
+  </Package>
+</Wix>

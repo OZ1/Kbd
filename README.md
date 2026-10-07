@@ -26,6 +26,19 @@ Kbd -Uninstall KbdSlav
 въ реестръ и добавитъ её къ языку текущаго пользователя (`-NoLangBar` — не добавлять).  
 Удалить можно и изъ «Установленныхъ приложеній». Подробности — въ шапкѣ [Install-Kbd.ps1](Install-Kbd.ps1).
 
+### Или MSI
+
+`KbdSlav.msi` и `KbdLat.msi` изъ тѣхъ же релизовъ — по пакету на разкладку, каждый годится и для x64,
+и для ARM64 (Windows 11). Онъ дѣлаетъ то же, что скриптъ, только средствами Windows Installer, и прежнюю
+установку скриптомъ замѣняетъ. Безъ окна и безъ добавленія въ списокъ языковъ:
+
+```bat
+msiexec /i KbdSlav.msi /qn NOLANGBAR=1
+```
+
+Сборка: `dotnet build Setup\KbdSlav.wixproj -c Release` (нужны dll всѣхъ трёхъ платформъ),
+подробности — въ [Setup](Setup).
+
 ## А́збука (KbdSlav)
 
 ![Разкладка А́збука](KbdSlav/KbdSlav.png)
