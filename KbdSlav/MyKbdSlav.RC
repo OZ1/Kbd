@@ -35,7 +35,7 @@ END
 STRINGTABLE DISCARDABLE
 LANGUAGE 0x19, 1
 BEGIN
-    1000    "Азбука"  // Layout Text
+    1000    "А́збука"  // Layout Text
     1100    "Русскій" // Layout Language Name
     1200    "ru-RU"   // Layout Locale Name
 END
