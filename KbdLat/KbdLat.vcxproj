@@ -66,6 +66,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)'=='MSKLC'">true</ExcludedFromBuild>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="KbdLat.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6896FD58-84CA-379A-3950-9AB3988945FC}</ProjectGuid>
     <TemplateGuid>{504102d4-2172-473c-8adf-cd96e308f257}</TemplateGuid>
