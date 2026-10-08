@@ -1,0 +1,42 @@
+name: KbdSlav
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Коммитъ (SHA) для сборки и релиза; пусто — послѣдній коммитъ вѣтки
+        required: false
+        default: ''
+  push:
+    branches: [ "master" ]
+    paths:
+    - 'KbdSlav/**'
+    - 'Install-Kbd.ps1'
+    - 'Kbd.cmd'
+    - 'KbdLayout.*'
+    - 'Setup/Kbd.wxs'
+    - 'Setup/Directory.Build.props'
+    - 'Setup/KbdSlav.wixproj'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+    - 'KbdSlav/**'
+    - 'Install-Kbd.ps1'
+    - 'Kbd.cmd'
+    - 'KbdLayout.*'
+    - 'Setup/Kbd.wxs'
+    - 'Setup/Directory.Build.props'
+    - 'Setup/KbdSlav.wixproj'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  layout:
+    uses: ./.github/workflows/MSBuild.yml
+    with:
+      layout: KbdSlav
+      ref: ${{ inputs.ref }}

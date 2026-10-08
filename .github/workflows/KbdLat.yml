@@ -1,0 +1,42 @@
+name: KbdLat
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Коммитъ (SHA) для сборки и релиза; пусто — послѣдній коммитъ вѣтки
+        required: false
+        default: ''
+  push:
+    branches: [ "master" ]
+    paths:
+    - 'KbdLat/**'
+    - 'Install-Kbd.ps1'
+    - 'Kbd.cmd'
+    - 'KbdLayout.*'
+    - 'Setup/Kbd.wxs'
+    - 'Setup/Directory.Build.props'
+    - 'Setup/KbdLat.wixproj'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+    - 'KbdLat/**'
+    - 'Install-Kbd.ps1'
+    - 'Kbd.cmd'
+    - 'KbdLayout.*'
+    - 'Setup/Kbd.wxs'
+    - 'Setup/Directory.Build.props'
+    - 'Setup/KbdLat.wixproj'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  layout:
+    uses: ./.github/workflows/MSBuild.yml
+    with:
+      layout: KbdLat
+      ref: ${{ inputs.ref }}
