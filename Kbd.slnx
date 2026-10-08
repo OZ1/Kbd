@@ -1,0 +1,66 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="MSKLC" />
+    <BuildType Name="Release" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Samples/">
+    <Project Path="E:/Samples/Windows-driver-samples/input/layout/all_kbds/kbdfr/kbdfr.vcxproj">
+      <BuildType Solution="MSKLC|*" Project="Debug" />
+      <Platform Solution="*|ARM64" Project="x64" />
+      <Build Solution="*|ARM64" Project="false" />
+      <Build Solution="MSKLC|x64" Project="false" />
+      <Build Solution="MSKLC|x86" Project="false" />
+    </Project>
+    <Project Path="E:/Samples/Windows-driver-samples/input/layout/all_kbds/kbdgr/kbdgr.vcxproj">
+      <BuildType Solution="MSKLC|*" Project="Debug" />
+      <Platform Solution="*|ARM64" Project="x64" />
+      <Build Solution="*|ARM64" Project="false" />
+      <Build Solution="MSKLC|x64" Project="false" />
+      <Build Solution="MSKLC|x86" Project="false" />
+    </Project>
+    <Project Path="E:/Samples/Windows-driver-samples/input/layout/fe_kbds/jpn/101/kbd101.vcxproj">
+      <BuildType Solution="MSKLC|*" Project="Debug" />
+      <Platform Solution="*|ARM64" Project="x64" />
+      <Build Solution="*|ARM64" Project="false" />
+      <Build Solution="MSKLC|x64" Project="false" />
+      <Build Solution="MSKLC|x86" Project="false" />
+    </Project>
+    <Project Path="E:/Samples/Windows-driver-samples/input/layout/fe_kbds/jpn/106/kbd106.vcxproj">
+      <BuildType Solution="MSKLC|*" Project="Debug" />
+      <Platform Solution="*|ARM64" Project="x64" />
+      <Build Solution="*|ARM64" Project="false" />
+      <Build Solution="MSKLC|x64" Project="false" />
+      <Build Solution="MSKLC|x86" Project="false" />
+    </Project>
+    <Project Path="E:/Samples/Windows-driver-samples/input/layout/kbdus/kbdus.vcxproj">
+      <BuildType Solution="MSKLC|*" Project="Debug" />
+      <Platform Solution="*|ARM64" Project="x64" />
+      <Build Solution="*|ARM64" Project="false" />
+      <Build Solution="MSKLC|x64" Project="false" />
+      <Build Solution="MSKLC|x86" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path="Install-Kbd.ps1" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="DeCompile/DeCompile.vcxproj" Id="dbef114a-7927-4046-af2b-737d97992f19">
+    <BuildType Solution="MSKLC|*" Project="Debug" />
+    <Platform Project="x64" />
+    <Build Solution="*|ARM64" Project="false" />
+    <Build Solution="*|x86" Project="false" />
+    <Build Solution="MSKLC|x64" Project="false" />
+  </Project>
+  <Project Path="KbdLat/KbdLat.vcxproj">
+    <BuildType Solution="Debug|*" Project="Release" />
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+  <Project Path="KbdSlav/KbdSlav.vcxproj">
+    <BuildType Solution="Debug|*" Project="Release" />
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+</Solution>

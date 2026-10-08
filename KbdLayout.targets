@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Общія цѣли разкладокъ KbdLat и KbdSlav; подключается послѣ Microsoft.Cpp.targets -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Версія повышается до ResourceCompile, чтобы попасть въ эту же dll, и только если исходники новѣе отмѣтки.
+	     Отмѣтка одна на всѣ платформы (въ bin\out): первая платформа повышаетъ, остальныя собираются съ тѣмъ же номеромъ.
+	     Платформы VS собираетъ параллельно, поэтому отмѣтка ещё разъ провѣряется въ задачѣ подъ именованнымъ мьютексомъ.
+	     Въ CI не дѣлается: тамъ версію въ .rc ставитъ job version, а отмѣтки нѣтъ — повысилъ бы на единицу -->
+	<Target Name="IncrementFileVersion" BeforeTargets="ResourceCompile" Inputs="@(ClCompile);@(ClInclude)" Outputs="$(OutDir)..\$(ProjectName).version" Condition="'$(GITHUB_ACTIONS)'!='true'">
+		<IncrementFileVersion Items="@(ResourceCompile)" Sources="@(ClCompile);@(ClInclude)" Stamp="$(OutDir)..\$(ProjectName).version" Condition="'%(ResourceCompile.ExcludedFromBuild)'!='true'" />
+	</Target>
+	<UsingTask TaskName="IncrementFileVersion" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Sources ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+			<Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+			<Stamp ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Linq" />
+			<Using Namespace="System.Text" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Using Namespace="System.Threading" />
+			<Code Type="Fragment" Language="cs"><![CDATA[
+string stamp = Path.GetFullPath(Stamp);
+using Mutex mutex = new(false, @"Local\IncrementFileVersion:" + stamp.ToUpperInvariant().Replace('\\', '/'));
+try { mutex.WaitOne(); } catch (AbandonedMutexException) { }
+try {
+// Пока ждали мьютексъ, другая платформа могла уже повысить версію
+if (File.Exists(stamp) && Sources.All(s => File.GetLastWriteTimeUtc(s.GetMetadata("FullPath")) <= File.GetLastWriteTimeUtc(stamp))) return true;
+
+Regex rx = new(@"(^\s*FILEVERSION\s*(?:\d+\s*,\s*){3})(\d+)(\s*$)", RegexOptions.Multiline | RegexOptions.CultureInvariant);
+
+byte[] head = new byte[2];
+foreach (var rc in Items)
+{
+	string original;
+	Encoding encoding;
+	using (FileStream fs = new(rc.ItemSpec, FileMode.Open, FileAccess.Read))
+	{
+		// BOM узнаётъ самъ StreamReader; здѣсь — только кодировка на случай, когда BOM нѣтъ
+		Encoding fallback = fs.Read(head, 0, head.Length) switch
+		{
+			2 when head[0] == 0 => Encoding.BigEndianUnicode,
+			2 when head[1] == 0 => Encoding.Unicode,
+			_ => Encoding.Default,
+		};
+		fs.Seek(0, SeekOrigin.Begin);
+
+		using StreamReader f = new(fs, fallback, true);
+		original = f.ReadToEnd();
+		encoding = f.CurrentEncoding;
+	}
+	string incremented = rx.Replace(original, m =>
+	{
+		var build  = ushort.Parse(m.Groups[2].Value);
+		if (build == ushort.MaxValue)
+		{
+			Log.LogError(null, null, null, rc.ItemSpec, 0, 0, 0, 0, $"FILEVERSION: четвёртое число уже {build}, больше не бываетъ");
+			return m.Value;
+		}
+		return $"{m.Groups[1]}{build + 1}{m.Groups[3]}";
+	});
+	if (incremented != original)
+		File.WriteAllText(rc.ItemSpec, incremented, encoding);
+}
+Directory.CreateDirectory(Path.GetDirectoryName(stamp));
+File.WriteAllText(stamp, "");
+} finally { mutex.ReleaseMutex(); }]]></Code>
+		</Task>
+	</UsingTask>
+
+	<!-- Хардлинкъ dll въ bin\System32 (x64), bin\SysWoW64 (Win32), bin\ARM64: «развёртываніе» для C++, у котораго галочки Deploy нѣтъ -->
+	<Target Name="DeployBin" AfterTargets="Build" Condition="'$(Configuration)'=='Release' And '$(GITHUB_ACTIONS)'!='true'">
+		<PropertyGroup>
+			<DeployBinDir Condition="'$(Platform)'=='ARM64'">ARM64</DeployBinDir>
+			<DeployBinDir Condition="'$(Platform)'=='Win32'">SysWoW64</DeployBinDir>
+			<DeployBinDir Condition="'$(DeployBinDir)'==''" >System32</DeployBinDir>
+		</PropertyGroup>
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)bin\$(DeployBinDir)" UseHardlinksIfPossible="true" Condition="'$(DeployBinDir)'!=''" ContinueOnError="true" />
+		<Exec Command="mklink /J &quot;$(MSBuildThisFileDirectory)bin\Windows&quot; $(WinDir)" Condition="!Exists('$(MSBuildThisFileDirectory)bin\Windows')" ContinueOnError="true" StandardOutputImportance="low" />
+	</Target>
+
+</Project>

@@ -79,6 +79,7 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="..\KbdLayout.Default.props" />
   <PropertyGroup Label="Configuration">
     <TargetVersion>Windows10</TargetVersion>
     <DriverTargetPlatform>Universal</DriverTargetPlatform>
@@ -88,15 +89,6 @@
   <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Platform)'=='x64'">
-    <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Platform)'=='Win32'">
-    <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Platform)'=='ARM64'">
-    <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
-  </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <PlatformToolset>$(DefaultPlatformToolset)</PlatformToolset>
   </PropertyGroup>
@@ -105,183 +97,29 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\KbdLayout.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <IntDir>$(SolutionDir)bin\out\$(Configuration)-$(Platform)-$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifest>false</GenerateManifest>
-    <IgnoreImportLibrary>true</IgnoreImportLibrary>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|ARM64'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|Win32'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|x64'">
-    <OutDir>$(IntDir)</OutDir>
-  </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <ControlFlowGuard>false</ControlFlowGuard>
-    </ClCompile>
     <Link>
       <ModuleDefinitionFile>My$(ProjectName).def</ModuleDefinitionFile>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.textbss=.data /MERGE:.bss=.data /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.pdata=.data</AdditionalOptions>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN=1;VER_INTERNALNAME_STR="\"$(ProjectName)\"";VER_ORIGINALFILENAME_STR="\"$(TargetFileName)\"";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;BUILD_WOW6432;_WOW6432_;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-    </ClCompile>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <Link>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <NoEntryPoint>true</NoEntryPoint>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <BaseAddress>0xBD0000</BaseAddress>
+      <BaseAddress>0xBE0000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;BUILD_WOW6432;_WOW6432_;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-    </ClCompile>
+  <ItemDefinitionGroup Condition="'$(Platform)'!='Win32'">
     <Link>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <NoEntryPoint>true</NoEntryPoint>
-      <BaseAddress>0xBD0000</BaseAddress>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-    </ClCompile>
-    <Link>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <NoEntryPoint>true</NoEntryPoint>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <BaseAddress>0xBD00000000</BaseAddress>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-    </ClCompile>
-    <Link>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <NoEntryPoint>true</NoEntryPoint>
-      <BaseAddress>0xBD00000000</BaseAddress>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <NoEntryPoint>true</NoEntryPoint>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <BaseAddress>0xBD00000000</BaseAddress>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MSKLC|ARM64'">
-    <ClCompile>
-      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <MergeSections>.text=.data</MergeSections>
-      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
-      <SetChecksum>true</SetChecksum>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <NoEntryPoint>true</NoEntryPoint>
-      <BaseAddress>0xBD00000000</BaseAddress>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <BaseAddress>0xBE00000000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
-  <Target Name="IncrementFileVersion" AfterTargets="Build">
-    <IncrementFileVersion Items="@(ResourceCompile)" Condition="'%(ResourceCompile.ExcludedFromBuild)'!='true'" />
-  </Target>
-  <UsingTask TaskName="IncrementFileVersion" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Using Namespace="System.Text" />
-      <Using Namespace="System.Text.RegularExpressions" />
-      <Code Type="Fragment" Language="cs"><![CDATA[
-Regex rx = new(@"(^\s*FILEVERSION\s*(?:\d+\s*,\s*){3})(\d+)(\s*$)",
-	RegexOptions.IgnorePatternWhitespace |
-	RegexOptions.Singleline |
-	RegexOptions.Multiline |
-	RegexOptions.CultureInvariant);
-
-byte[] bom = new byte[4];
-foreach (var rc in Items)
-{
-	string original;
-	Encoding encoding;
-	using (FileStream fs = new(rc.ItemSpec, FileMode.Open))
-	{
-		encoding = fs.Read(bom, 0, bom.Length) switch
-		{
-			>= 4 when bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xFE && bom[3] == 0xFF => new UTF32Encoding(true, true),
-			>= 4 when bom[0] == 0xFF && bom[1] == 0xFE && bom[2] == 0x00 && bom[3] == 0x00 => Encoding.UTF32,
-			>= 3 when bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF => Encoding.UTF8,
-			>= 2 when bom[0] == 0xFE && bom[1] == 0xFF => Encoding.BigEndianUnicode,
-			>= 2 when bom[0] == 0xFF && bom[1] == 0xFE => Encoding.Unicode,
-			>= 2 when bom[0] == 0 => Encoding.BigEndianUnicode,
-			>= 2 when bom[1] == 0 => Encoding.Unicode,
-			_ => Encoding.Default,
-		};
-		fs.Seek(0, SeekOrigin.Begin);
-
-		using StreamReader f = new(fs, encoding, true);
-		original = f.ReadToEnd();
-		encoding = f.CurrentEncoding;
-	}
-	var incremented = rx.Replace(original, m => $"{m.Groups[1]}{uint.Parse(m.Groups[2].Value) + 1}{m.Groups[3]}");
-	if (incremented.Equals(original, StringComparison.Ordinal)) continue;
-	File.WriteAllText(rc.ItemSpec, incremented, encoding);
-}]]></Code>
-    </Task>
-  </UsingTask>
+  <Import Project="..\KbdLayout.targets" />
 </Project>

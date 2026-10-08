@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Общія свойства разкладокъ KbdLat и KbdSlav -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IntDir>$(MSBuildThisFileDirectory)bin\out\$(Configuration)-$(Platform)-$(ProjectName)\</IntDir>
+    <OutDir>$(IntDir)</OutDir>
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PreprocessorDefinitions>NOGDICAPMASKS;NOWINMESSAGES;NOWINSTYLES;NOSYSMETRICS;NOMENUS;NOICONS;NOSYSCOMMANDS;NORASTEROPS;NOSHOWWINDOW;OEMRESOURCE;NOATOM;NOCLIPBOARD;NOCOLOR;NOCTLMGR;NODRAWTEXT;NOGDI;NOKERNEL;NONLS;NOMB;NOMEMMGR;NOMETAFILE;NOMINMAX;NOMSG;NOOPENFILE;NOSCROLL;NOSERVICE;NOSOUND;NOTEXTMETRIC;NOWINOFFSETS;NOWH;NOCOMM;NOKANJI;NOHELP;NOPROFILER;NODEFERWINDOWPOS;NOMCX;WIN32_LEAN_AND_MEAN;Roster;WINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP;WINAPI_PARTITION_DESKTOP=1;WINAPI_PARTITION_SYSTEM=1;WINAPI_PARTITION_APP=1;WINAPI_PARTITION_PC_APP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <MergeSections>.text=.data</MergeSections>
+      <SpecifySectionAttributes>.data,RE!W;.text,D;.rsrc,D</SpecifySectionAttributes>
+      <SetChecksum>true</SetChecksum>
+      <NoEntryPoint>true</NoEntryPoint>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalOptions>/EMITPOGOPHASEINFO /MERGE:.textbss=.data /MERGE:.bss=.data /MERGE:.rdata=.data /MERGE:.edata=.data /MERGE:.pdata=.data %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>BUILD_WOW6432;_WOW6432_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

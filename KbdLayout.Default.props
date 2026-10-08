@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Общія свойства разкладокъ KbdLat и KbdSlav, нужныя до Microsoft.Cpp.props; подключается послѣ Microsoft.Cpp.Default.props -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Configuration">
+    <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
+  </PropertyGroup>
+</Project>
