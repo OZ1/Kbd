@@ -127,4 +127,5 @@ MSBuild KbdSlav\KbdSlav.vcxproj /p:Configuration=Release /p:Platform=x64
 При каждомъ пушѣ въ `master` GitHub Actions собираетъ всѣ dll и выкладываетъ архивы въ релизъ.
 
 Исходники разкладокъ — [KbdSlav/MyKbdSlav.cpp](KbdSlav/MyKbdSlav.cpp) и [KbdLat/MyKbdLat.cpp](KbdLat/MyKbdLat.cpp).  
-`DeCompile` — вспомогательная программа, выводящая таблицы готовой dll въ видѣ исходника на C.
+`DeCompile` — вспомогательная программа, выводящая таблицы готовой dll въ видѣ исходника на C.  
+`KbdImage` — WinForms приложеніе, строящее картинку разкладки по MyKbd*.cpp или по .dll.

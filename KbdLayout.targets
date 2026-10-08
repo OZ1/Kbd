@@ -82,4 +82,29 @@ File.WriteAllText(stamp, "");
 		<Exec Command="mklink /J &quot;$(MSBuildThisFileDirectory)bin\Windows&quot; $(WinDir)" Condition="!Exists('$(MSBuildThisFileDirectory)bin\Windows')" ContinueOnError="true" StandardOutputImportance="low" />
 	</Target>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(GITHUB_ACTIONS)'!='true'">
+		<!-- Картинка лежитъ въ img\, если такая папка есть, иначе рядомъ съ проектомъ (какъ въ .githooks/pre-commit) -->
+		<KbdImagePng Condition="'$(KbdImagePng)'=='' And Exists('$(MSBuildProjectDirectory)\img')">$(MSBuildProjectDirectory)\img\$(ProjectName).png</KbdImagePng>
+		<KbdImagePng Condition="'$(KbdImagePng)'==''">$(MSBuildProjectDirectory)\$(ProjectName).png</KbdImagePng>
+		<!-- .NET task host ищется по DOTNET_HOST_PATH и NetCoreSdkRoot, а ихъ задаётъ только .NET SDK, это же проектъ C++. Берётся старшій изъ установленныхъ SDK 10.x -->
+		<DOTNET_HOST_PATH Condition="'$(DOTNET_HOST_PATH)'==''">$(ProgramW6432)\dotnet\dotnet.exe</DOTNET_HOST_PATH>
+		<NetCoreSdks    Condition="'$(NetCoreSdkRoot)'=='' And Exists('$([System.IO.Path]::GetDirectoryName($(DOTNET_HOST_PATH)))\sdk')">$([System.IO.Directory]::GetDirectories($([System.IO.Path]::GetDirectoryName($(DOTNET_HOST_PATH)))\sdk))</NetCoreSdks>
+		<NetCoreSdkRoot Condition="'$(NetCoreSdkRoot)'==''">$([System.Text.RegularExpressions.Regex]::Replace($(NetCoreSdks), '^(?:.*;)?([^;]+\\10\.\d+\.\d+)(?:;.*)?$', '$1'))\</NetCoreSdkRoot>
+	</PropertyGroup>
+	<!-- KbdImage собирается до картинки: изъ его сборки берётся задача SaveKbdImageTask. Не ProjectReference:
+	     VS беретъ конфигурацію сосѣдняго проекта изъ рѣшенія и SetConfiguration не слушаетъ, такъ что Release не собирался.
+	     Restore — отдѣльнымъ вызовомъ съ лишнимъ свойствомъ, чтобы MSBuild не взялъ изъ кэша проектъ до restore -->
+	<Target Name="BuildKbdImage" BeforeTargets="KbdImage" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(GITHUB_ACTIONS)'!='true'">
+		<MSBuild Projects="$(MSBuildThisFileDirectory)KbdImage\KbdImage.csproj" Targets="Restore" Properties="Configuration=Release;Platform=AnyCPU;KbdImageRestore=true" />
+		<MSBuild Projects="$(MSBuildThisFileDirectory)KbdImage\KbdImage.csproj" Targets="Build" Properties="Configuration=Release;Platform=AnyCPU" />
+	</Target>
+	<Target Name="KbdImage" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(GITHUB_ACTIONS)'!='true'">
+		<Warning Condition="!Exists('$(NetCoreSdkRoot)')" Text="Не найденъ .NET SDK 10.x въ $([System.IO.Path]::GetDirectoryName($(DOTNET_HOST_PATH)))\sdk — задачѣ SaveKbdImageTask нуженъ .NET task host" />
+		<!-- Картинка разкладки изъ MyKbd*.cpp. Въ CI не дѣлается: она уже лежитъ въ коммитѣ (.githooks/pre-commit),
+		     а если не лежитъ — ее пересоздаётъ задача image въ .github/workflows/MSBuild.yml -->
+		<SaveKbdImageTask Input="$(MSBuildProjectDirectory)\My$(ProjectName).cpp" Output="$(KbdImagePng)" ContinueOnError="true" />
+	</Target>
+	<!-- KbdImage — сборка .NET, а MSBuild въ VS — .NET Framework: задача идётъ въ отдѣльномъ .NET task host -->
+	<UsingTask TaskName="KbdImage.SaveKbdImageTask" TaskFactory="TaskHostFactory" Runtime="NET"
+	           AssemblyFile="$(MSBuildThisFileDirectory)KbdImage\bin\Release\net10.0-windows\KbdImage.dll" />
 </Project>

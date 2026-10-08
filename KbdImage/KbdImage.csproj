@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>KbdImage</AssemblyName>
+		<RootNamespace>KbdImage</RootNamespace>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+		<ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+		<SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
+		<ApplicationIcon>App.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="App.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <!-- Для задачи SaveKbdImage; сборки MSBuild даётъ самъ MSBuild, въ выводъ ихъ не класть -->
+	  <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.9.6" ExcludeAssets="runtime" PrivateAssets="all" />
+	</ItemGroup>
+
+</Project>

@@ -55,6 +55,9 @@
     <Build Solution="*|x86" Project="false" />
     <Build Solution="MSKLC|x64" Project="false" />
   </Project>
+  <Project Path="KbdImage/KbdImage.csproj">
+    <BuildType Solution="MSKLC|*" Project="Release" />
+  </Project>
   <Project Path="KbdLat/KbdLat.vcxproj">
     <BuildType Solution="Debug|*" Project="Release" />
     <Build Solution="Debug|*" Project="false" />

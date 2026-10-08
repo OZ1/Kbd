@@ -1,0 +1,18 @@
+#!/bin/sh
+# Коммитъ съ MyKbd*.cpp уходитъ вмѣстѣ съ пересозданной картинкой разкладки (Kbd*.png).
+# Включить: git config core.hooksPath .githooks   (нуженъ dotnet 10)
+root=$(git rev-parse --show-toplevel) || exit 1
+tmp=$(mktemp -d) || exit 1
+trap 'rm -rf "$tmp"' EXIT
+git diff --cached --name-only --diff-filter=ACMR | grep -E '(^|/)MyKbd[^/]*\.cpp$' > "$tmp/list"
+while IFS= read -r f; do
+	dir=$(dirname "$f")
+	name=$(basename "$f" .cpp); name=${name#My}
+	png="$dir/$name.png"; [ -d "$root/$dir/img" ] && png="$dir/img/$name.png"
+	# KLID разкладки (для сѵстемной разкраски) — изъ Setup/Kbd.wxs, копія въ temp его рядомъ не найдётъ
+	klid=$(tr -d '\r' < "$root/Setup/Kbd.wxs" | grep -A1 "Layout) = \"$name\"" | sed -n 's/.*Klid *= *"\([0-9a-fA-F]*\)".*/\1/p')
+	# Берётся то, что въ индексѣ, а не въ рабочей копіи
+	git show ":$f" > "$tmp/$(basename "$f")" || exit 1
+	dotnet run --project "$root/KbdImage/KbdImage.csproj" -c Release -- "$tmp/$(basename "$f")" save "$root/$png" ${klid:+klid "$klid"} || { echo "KbdImage: не удалось создать $png" >&2; exit 1; }
+	git add -- "$png" || exit 1
+done < "$tmp/list"

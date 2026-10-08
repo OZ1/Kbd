@@ -120,6 +120,58 @@ jobs:
         path: bin\out\Release-${{matrix.platform}}-${{inputs.layout}}\${{inputs.layout}}.dll
         if-no-files-found: error
 
+  # Картинка разкладки (Kbd*.png) создаётся хукомъ .githooks/pre-commit прямо въ коммитѣ съ MyKbd*.cpp.
+  # Если коммитъ пришёлъ съ MyKbd*.cpp безъ картинки (хукъ не включёнъ, правка съ сайта) — пересоздаёмъ ее и докоммичиваемъ.
+  # Когда картинка въ коммитѣ уже есть, ничего не дѣлается; при сборкѣ vcxproj картинка не создаётся (GITHUB_ACTIONS).
+  # Выходъ sha — коммитъ съ картинкою, если она докоммичена; на него publish ставитъ релизъ и тегъ.
+  image:
+    if: github.event_name == 'push'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.img.outputs.sha }}
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+    - id: img
+      shell: pwsh
+      env:
+        NAME: ${{ inputs.layout }}
+      run: |
+        $before = '${{ github.event.before }}'
+        if ($before -match '^0+$') { $before = 'HEAD~1' }
+        $changed = @(git diff --name-only $before HEAD -- $env:NAME)
+        $todo = @()
+        foreach ($cpp in $changed | Where-Object { $_ -match '(^|/)MyKbd[^/]*\.cpp$' }) {
+            $dir  = Split-Path $cpp
+            $name = [IO.Path]::GetFileNameWithoutExtension($cpp) -replace '^My'
+            $png  = if (Test-Path "$dir/img") { "$dir/img/$name.png" } else { "$dir/$name.png" }
+            if ($changed -contains $png) { "${cpp}: картинка уже въ коммитѣ"; continue }
+            dotnet run --project KbdImage/KbdImage.csproj -c Release -- $cpp save $png
+            if ($LASTEXITCODE) { exit 1 }
+            $todo += $png
+        }
+        if ($todo) {
+            git add -- $todo
+            git diff --cached --quiet
+            if ($LASTEXITCODE) {
+                $id = '-c', 'user.name=github-actions', '-c', 'user.email=github-actions@users.noreply.github.com'
+                # [skip ci] не нуженъ: push съ GITHUB_TOKEN workflow не запускаетъ
+                git @id commit -m "${env:NAME}.png: картинка разкладки"
+                # Другая разкладка могла докоммитить свою картинку раньше
+                git @id pull --rebase origin ${{ github.ref_name }}
+                git push origin HEAD:${{ github.ref_name }}
+                if ($LASTEXITCODE) { exit 1 }
+                "sha=$(git rev-parse HEAD)" >> $env:GITHUB_OUTPUT
+            }
+        }
+        exit 0
+
   # Два архива (<Name>-amd64.zip, <Name>-arm64.zip): родная сборка въ System32, 32-битная въ SysWOW64, плюсъ скриптъ установки.
   # Плюсъ три MSI (Setup\<Name>.wixproj): <Name>.msi — одинъ на x64 и ARM64, и <Name>-amd64.msi, <Name>-arm64.msi — по одной родной dll.
   # 32-битной Windows архива нѣтъ: Win32-сборка идётъ съ BUILD_WOW6432 и годна только для SysWOW64.
@@ -127,9 +179,11 @@ jobs:
   # Тегъ ставитъ gh release create; если релизъ уже есть, дозагружаются лишь недостающіе файлы —
   # выложенные не замѣняются, какъ и на Pages.
   # MSI той же версіи — на Pages, съ таблицею всѣхъ выкладокъ въ index.html.
+  # Ждётъ image, чтобы релизъ легъ на коммитъ съ картинкою; image пропускается внѣ push — отсюда !failure().
   publish:
-    needs: [version, build]
+    needs: [version, build, image]
     if: >-
+      !failure() && !cancelled() &&
       github.event_name != 'pull_request' && needs.version.outputs.release == 'true'
     runs-on: windows-latest
     # Обѣ разкладки пишутъ въ gh-pages — по очереди
@@ -151,7 +205,7 @@ jobs:
         NAME: ${{ inputs.layout }}
         FV:   ${{ needs.version.outputs.fv }}
         PV:   ${{ needs.version.outputs.pv }}
-        SHA:  ${{ needs.version.outputs.sha }}
+        SHA:  ${{ needs.image.outputs.sha || needs.version.outputs.sha }}
       run: |
         # .dll → \System32
         $ErrorActionPreference = 'Stop'
