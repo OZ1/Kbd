@@ -1,7 +1,6 @@
 ﻿#define KBD_TYPE KEYBOARD_TYPE_GENERIC_101
 
 #include <Windows.h>
-#include <WinUser.h>
 #include <kbd.h>
 
 #pragma data_seg(".data")
@@ -177,10 +176,11 @@ static ALLOC_SECTION_LDATA VSC_VK aE1VscToVk[] = {
 /***************************************************************************\
 * aVkToBits[]  - map Virtual Keys to Modifier Bits
 *
-* The keyboard has only three shifter keys:
-*     SHIFT (L & R) affects alphabnumeric keys,
+* The keyboard has four shifter keys:
+*     SHIFT (L & R) affects alphanumeric keys,
 *     CTRL  (L & R) is used to generate control characters
-*     ALT   (L & R) used for generating characters by number with numpad
+*     ALT   (L) used for generating characters by number with numpad
+*     KANA  (R) selects the second (Slavonic) layer
 \***************************************************************************/
 static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 	VK_SHIFT,       KBDSHIFT,
@@ -196,7 +196,7 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 * aModification[]  - map character modifier bits to modification number
 *
 \***************************************************************************/
-static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
+static ALLOC_SECTION_LDATA MODIFIERS aModification = {
 	&aVkToBits[0],
 	9,
 	{
@@ -267,8 +267,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS1 aVkToWch1[] = {
  };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch2[] = {
-//	                    |     |Shift|
-//	                    |=====|=====|
+//	                    │     │Shift│
+//	                    ╞═════╪═════╡
 	{VK_OEM_AUTO     , 0,  '`',  '~'},
 	{VK_ABNT_C2      , 0,  '.',  ','},
 	{VK_SEPARATOR    , 0,  ',',  '.'},
@@ -358,8 +358,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 };
 
 // Put this last so that VkKeyScan interprets number characters
-// as coming from the main section of the kbd (aVkToWch0 and aVkToWch5)
-// before considering the numpad (aVkToWch1).
+// as coming from the main section of the kbd (aVkToWchT)
+// before considering the numpad (aVkToWchN).
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWchN[] = {
 //	                   │    │ -Shft- │ Control │ Kana│               │    │ -Shft- │ Control │ Kana    │    │ │ Shift │
 //	                   ╞════╪════════╪═════════╪═════╡               ╞════╪════════╪═════════╪═════════╡    ╞═╪═══════╡
@@ -768,7 +768,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 	/*
 	 * Modifier keys
 	 */
-	&CharModifiers,
+	&aModification,
 
 	/*
 	 * Characters tables

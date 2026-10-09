@@ -489,7 +489,7 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {)");
 *
 \***************************************************************************/
 
-static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
+static ALLOC_SECTION_LDATA MODIFIERS aModification = {
 	aVkToBits,)");
 		wprintf_s(L"	%hhu,", aModification->wMaxModBits);
 		_putws(LR"(
@@ -714,7 +714,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
 	/*
 	 * Modifier keys
 	 */
-	&CharModifiers,
+	&aModification,
 
 	/*
 	 * Characters tables

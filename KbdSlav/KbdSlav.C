@@ -152,7 +152,7 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
 *
 \***************************************************************************/
 
-static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
+static ALLOC_SECTION_LDATA MODIFIERS aModification = {
     &aVkToBits[0],
     7,
     {
@@ -534,7 +534,7 @@ static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
     /*
      * Modifier keys
      */
-    &CharModifiers,
+    &aModification,
 
     /*
      * Characters tables
