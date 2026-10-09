@@ -649,6 +649,7 @@ static ALLOC_SECTION_LDATA DEADKEY aDeadKey[] = {
 	DEADTRANS(L'8', L'⅟', L'⅛', 0),
 	DEADTRANS(L'9', L'⅟', L'⅑', 0),
 
+	DEADTRANS(L' ', L'⅔', L'⅔', 0),
 	DEADTRANS(L'3', L'⅔', L'⅔', 0),
 	DEADTRANS(L'4', L'⅔', L'¾', 0),
 	DEADTRANS(L'5', L'⅔', L'⅖', 0),
@@ -661,8 +662,8 @@ static ALLOC_SECTION_LDATA DEADKEY aDeadKey[] = {
 
 	DEADTRANS(L' ', L'⅙', L'⅙', 0),
 	DEADTRANS(L'1', L'⅙', L'⅙', 0),
-	DEADTRANS(L'2', L'⅙', L'⅓', 0),
-	DEADTRANS(L'3', L'⅙', L'½', 0),
+	DEADTRANS(L'2', L'⅙', L'½', 0),
+	DEADTRANS(L'3', L'⅙', L'⅓', 0),
 	DEADTRANS(L'4', L'⅙', L'⅔', 0),
 	DEADTRANS(L'5', L'⅙', L'⅚', 0),
 
@@ -674,6 +675,7 @@ static ALLOC_SECTION_LDATA DEADKEY aDeadKey[] = {
 	DEADTRANS(L'5', L'⅛', L'⅝', 0),
 	DEADTRANS(L'6', L'⅛', L'¾', 0),
 	DEADTRANS(L'7', L'⅛', L'⅞', 0),
+
 	'\0'
 };
 
