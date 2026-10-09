@@ -261,7 +261,6 @@ static ALLOC_SECTION_LDATA MODIFIERS aModification = {
 \***************************************************************************/
 static ALLOC_SECTION_LDATA VK_TO_WCHARS1 aVkToWch1[] = {
 	{VK_TAB   , 0, '\t'   },
-	{VK_CANCEL, 0, WCH_ETX},
 	{VK_ESCAPE, 0, WCH_ESC},
 	{}
  };
@@ -278,9 +277,10 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch2[] = {
  };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch3[] = {
-//	           │     │Shift│ Control│
-//	           ╞═════╪═════╪════════╡
-	{VK_BACK, 0, '\b', '\b', WCH_DEL},
+//	             │        │ Shift  │ Control│
+//	             ╞════════╪════════╪════════╡
+	{VK_BACK  , 0,  '\b'  ,  '\b'  , WCH_DEL},
+	{VK_CANCEL, 0, WCH_ETX, WCH_ETX, WCH_ETX},
 	{}
 };
 
