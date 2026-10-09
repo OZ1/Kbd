@@ -35,8 +35,10 @@
 #define WCH_US  '\x1F' // Unit   separator
 #define WCH_DEL '\x7F'
 #define WCH_NEL L'\x85' // Next line
-#define WCH_LS  L'\x2028' // Line spearator
-#define WCH_PS  L'\x2029' // Paragraph separator
+#define WCH_LS    L'\u2028' // Line spearator
+#define WCH_PS    L'\u2029' // Paragraph separator
+#define WCH_FSP   L'\u2007' // Figure space
+#define WCH_NNBSP L'\u202F' // Narrow no-break space
 
 #define VK_TO_WCHAR_TABLE_ENTRY(aVkToWchI) \
 	{(PVK_TO_WCHARS1)aVkToWchI, ARRAYSIZE(aVkToWchI[0].wch), sizeof aVkToWchI[0]}
@@ -292,14 +294,14 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch4[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWch5[] = {
-//	               │     │ Shift  │ Control │ Kana  │ ↑Kana↑│
-//	               ╞═════╪════════╪═════════╪═══════╪═══════╡
-	{VK_RETURN  , 0, '\r', WCH_NEL, '\n'    , WCH_LS, WCH_PS},
-	{VK_DIVIDE  , 0,  '/', L'÷'   , WCH_NONE, L'∕'  , L'⁄'  },
-	{VK_MULTIPLY, 0,  '*', L'×'   , WCH_NONE, L'⋅'  , L'⁢'   },
-	{VK_SUBTRACT, 0,  '-', L'−'   , WCH_NONE, L'–'  , L'—'  },
-	{VK_ADD     , 0,  '+',  '+'   , WCH_NONE, L'±'  , L'∓'  },
-	{VK_SPACE   , 0,  ' ',  ' '   ,   ' '   , L' '  , L' '  },
+//	               │     │ Shift  │ Control │ Kana  │ ↑Kana↑ │
+//	               ╞═════╪════════╪═════════╪═══════╪════════╡
+	{VK_RETURN  , 0, '\r', WCH_NEL, '\n'    , WCH_LS, WCH_PS },
+	{VK_DIVIDE  , 0,  '/', L'÷'   , WCH_NONE, L'∕'  , L'⁄'   },
+	{VK_MULTIPLY, 0,  '*', L'×'   , WCH_NONE, L'⋅'  , L'⁢'    },
+	{VK_SUBTRACT, 0,  '-', L'−'   , WCH_NONE, L'–'  , L'—'   },
+	{VK_ADD     , 0,  '+',  '+'   , WCH_NONE, L'±'  , L'∓'   },
+	{VK_SPACE   , 0,  ' ',  ' '   ,   ' '   , L' '  , WCH_NNBSP},
 	{}
 };
 
