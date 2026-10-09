@@ -46,18 +46,18 @@
 #pragma warning(push)
 #pragma warning(disable:4005) // изменение макроопределения
 #if T00 != VK__none_ || \
-    T55 != VK__none_ || \
-    T60 != VK__none_ || \
-    T61 != VK__none_ || \
-    T70 != VK__none_ || \
-    T72 != VK__none_ || \
-    T74 != VK__none_ || \
-    T75 != VK__none_ || \
-    T77 != VK__none_ || \
-    T78 != VK__none_ || \
-    T79 != VK__none_ || \
-    T7A != VK__none_ || \
-    T7D != VK__none_
+	T55 != VK__none_ || \
+	T60 != VK__none_ || \
+	T61 != VK__none_ || \
+	T70 != VK__none_ || \
+	T72 != VK__none_ || \
+	T74 != VK__none_ || \
+	T75 != VK__none_ || \
+	T77 != VK__none_ || \
+	T78 != VK__none_ || \
+	T79 != VK__none_ || \
+	T7A != VK__none_ || \
+	T7D != VK__none_
 #error Txx != VK__none_
 #endif
 #define T00 VK_ICO_00
@@ -307,17 +307,17 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 //	                      │     │Shift│ Control │  Kana   │ ↑Kana↑  │               │         │  Shift  │ Control │  Kana   │↑Kana↑│
 //	                      ╞═════╪═════╪═════════╪═════════╪═════════╡               ╞═════════╪═════════╪═════════╪═════════╪══════╡
 	{VK_OEM_3     , 0     ,  '`',  '~', WCH_NONE, L'∀'   , WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, WCH_NONE, L'°'},
-	{'1'          , SGCAPS,  '1',  '!', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'¹'    , WCH_NONE, WCH_NONE, L'⅟'},
-	{'2'          , SGCAPS,  '2',  '@', L'\0'   , WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'},
-	{'3'          , SGCAPS,  '3',  '#', WCH_NONE, L'§'    , L'⅓'    }, {VK__none_, 0, L'³'    , L'⅓'    },
-	{'4'          , SGCAPS,  '4',  '$', WCH_NONE, L'₽'    , L'€'    }, {VK__none_, 0, L'⁴'    , L'¼'    },
-	{'5'          , SGCAPS,  '5',  '%', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁵'    , L'¾'    , WCH_NONE, L'⅕'},
-	{'6'          , SGCAPS,  '6',  '^', WCH_RS  , WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'},
-	{'7'          , SGCAPS,  '7',  '&', WCH_NONE, WCH_DEAD, L'∏'    }, {VK__none_, 0, L'⁷'    , L'⅞'    , WCH_NONE, L'⅛'},
-	{'8'          , SGCAPS,  '8', L'İ', WCH_NONE, L'ı'    , L'İ'    }, {VK__none_, 0, L'⁸'    , L'⅛'    },
-	{'9'          , SGCAPS,  '9',  '(', WCH_NONE, L'≤'    , L'∃'   }, {VK__none_, 0, L'⁹'    , L'⅜'    },
-	{'0'          , SGCAPS,  '0',  ')', WCH_NONE, L'≥'    , WCH_NONE}, {VK__none_, 0, L'⁰'    , L'⅝'    },
-	{VK_OEM_MINUS , SGCAPS,  '-',  '_', WCH_US  , L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    },
+	{'1'          , SGCAPS,  '1',  '!', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'¹'    , WCH_NONE, WCH_NONE, L'⅟'    , WCH_NONE},
+	{'2'          , SGCAPS,  '2',  '@', L'\0'   , WCH_DEAD, L'½'    }, {VK__none_, 0, L'²'    , L'½'    , WCH_NONE, L'⅔'    , WCH_NONE},
+	{'3'          , SGCAPS,  '3',  '#', WCH_NONE, L'§'    , L'⅓'    }, {VK__none_, 0, L'³'    , L'⅓'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{'4'          , SGCAPS,  '4',  '$', WCH_NONE, L'₽'    , L'€'    }, {VK__none_, 0, L'⁴'    , L'¼'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{'5'          , SGCAPS,  '5',  '%', WCH_NONE, WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁵'    , L'¾'    , WCH_NONE, L'⅕'    , WCH_NONE},
+	{'6'          , SGCAPS,  '6',  '^', WCH_RS  , WCH_DEAD, WCH_NONE}, {VK__none_, 0, L'⁶'    , L'⅚'    , WCH_NONE, L'⅙'    , WCH_NONE},
+	{'7'          , SGCAPS,  '7',  '&', WCH_NONE, WCH_DEAD, L'∏'    }, {VK__none_, 0, L'⁷'    , L'⅞'    , WCH_NONE, L'⅛'    , WCH_NONE},
+	{'8'          , SGCAPS,  '8', L'İ', WCH_NONE, L'ı'    , L'İ'    }, {VK__none_, 0, L'⁸'    , L'⅛'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{'9'          , SGCAPS,  '9',  '(', WCH_NONE, L'≤'    , L'∃'   }, {VK__none_, 0, L'⁹'    , L'⅜'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{'0'          , SGCAPS,  '0',  ')', WCH_NONE, L'≥'    , WCH_NONE}, {VK__none_, 0, L'⁰'    , L'⅝'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{VK_OEM_MINUS , SGCAPS,  '-',  '_', WCH_US  , L'±'    , L'—'    }, {VK__none_, 0, WCH_NONE, L'⅞'    , WCH_NONE, WCH_NONE, WCH_NONE},
 	{VK_OEM_PLUS  , 0     ,  '=',  '+', WCH_NONE, WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'´', L'ˇ'},
 	{'Q'          , 0     ,  'q',  'Q', WCH_NONE, L'ä'    , L'Ä'    },
 	{'W'          , 0     ,  'w',  'W', WCH_NONE, L'ś'    , L'Ś'    },
@@ -329,8 +329,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'I'          , 0     ,  'i',  'I', WCH_NONE, L'í'    , L'Í'    },
 	{'O'          , 0     ,  'o',  'O', WCH_NONE, L'ô'    , L'Ô'    },
 	{'P'          , 0     ,  'p',  'P', WCH_NONE, L'ś'    , L'Ś'    },
-	{VK_OEM_4     , SGCAPS,  '[',  '{', WCH_ESC , L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    },
-	{VK_OEM_6     , SGCAPS,  ']',  '}', WCH_GS  , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    },
+	{VK_OEM_4     , SGCAPS,  '[',  '{', WCH_ESC , L'ź'    , L'Ź'    }, {VK__none_, 0, L'┬'    , L'╦'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{VK_OEM_6     , SGCAPS,  ']',  '}', WCH_GS  , L'ć'    , L'Ć'    }, {VK__none_, 0, L'┤'    , L'╣'    , WCH_NONE, WCH_NONE, WCH_NONE},
 	{VK_OEM_5     , 0     , '\\',  '|', WCH_FS  , WCH_DEAD, WCH_DEAD}, {VK__none_, 0, WCH_NONE, WCH_NONE, WCH_NONE, L'¨', '^'},
 	{'A'          , 0     ,  'a',  'A', WCH_NONE, L'á'    , L'Á'    },
 	{'S'          , 0     ,  's',  'S', WCH_NONE, L'š'    , L'Š'    },
@@ -341,8 +341,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'J'          , 0     ,  'j',  'J', WCH_NONE, L'ó'    , L'Ó'    },
 	{'K'          , 0     ,  'k',  'K', WCH_NONE, L'ł'    , L'Ł'    },
 	{'L'          , 0     ,  'l',  'L', WCH_NONE, L'ľ'    , L'Ľ'    },
-	{VK_OEM_1     , SGCAPS,  ';',  ':', WCH_NONE, L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    },
-	{VK_OEM_7     , SGCAPS, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    },
+	{VK_OEM_1     , SGCAPS,  ';',  ':', WCH_NONE, L'ż'    , L'Ż'    }, {VK__none_, 0, L'┴'    , L'╩'    , WCH_NONE, WCH_NONE, WCH_NONE},
+	{VK_OEM_7     , SGCAPS, '\'', '\"', WCH_NONE, L'é'    , L'É'    }, {VK__none_, 0, L'├'    , L'╠'    , WCH_NONE, WCH_NONE, WCH_NONE},
 	{'Z'          , 0     ,  'z',  'Z', WCH_NONE, L'ž'    , L'Ž'    },
 	{'X'          , 0     ,  'x',  'X', WCH_NONE, L'ć'    , L'Ć'    },
 	{'C'          , 0     ,  'c',  'C', WCH_NONE, L'č'    , L'Č'    },
@@ -370,7 +370,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWchN[] = {
 	{VK_NUMPAD3, 0     , '3', L'Ⅲ'	 , WCH_NONE, L'┘'    }, //              ╝   Page↓
 	{VK_NUMPAD4, 0     , '4', L'Ⅳ'	 , WCH_NONE, L'│'    }, //              ║   ←
 	{VK_NUMPAD5, 0     , '5', L'Ⅴ'	 , WCH_NONE, L'┼'    }, //              ╬   Clear
-  	{VK_NUMPAD6, 0     , '6', L'Ⅵ'	 , WCH_NONE, L'│'    }, //              ║   →
+	{VK_NUMPAD6, 0     , '6', L'Ⅵ'	 , WCH_NONE, L'│'    }, //              ║   →
 	{VK_NUMPAD7, 0     , '7', L'Ⅶ'	 , WCH_NONE, L'┌'    }, //              ╔   Home
 	{VK_NUMPAD8, 0     , '8', L'Ⅷ'	 , WCH_NONE, L'─'    }, //              ═   ↑
 	{VK_NUMPAD9, 0     , '9', L'Ⅸ'	 , WCH_NONE, L'┐'    }, //              ╗   Page↑
