@@ -352,8 +352,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS5 aVkToWchT[] = {
 	{'B'          , SGCAPS, L'и', L'И', WCH_NONE, L'і'    , L'І'    }, {VK__none_, 0,  'b',  'B', WCH_NONE, WCH_NONE, WCH_NONE},
 	{'N'          , SGCAPS, L'т', L'Т', WCH_NONE, L'ѿ'    , L'Ѿ'    }, {VK__none_, 0,  'n',  'N', WCH_NONE, WCH_NONE, WCH_NONE},
 	{'M'          , SGCAPS, L'ь', L'Ь', WCH_NONE, L'ѵ'    , L'Ѵ'    }, {VK__none_, 0,  'm',  'M', WCH_NONE, WCH_NONE, WCH_NONE},
-	{VK_OEM_COMMA , SGCAPS, L'б', L'Б', WCH_NONE, L'ѭ'    , L'Ѭ'    }, {VK__none_, 0,  ',',  '<', WCH_NONE, WCH_NONE, WCH_NONE},
-	{VK_OEM_PERIOD, SGCAPS, L'ю', L'Ю', WCH_NONE, L'ѫ'    , L'Ѫ'    }, {VK__none_, 0,  '.',  '>', WCH_NONE, WCH_NONE, WCH_NONE},
+	{VK_OEM_COMMA , SGCAPS, L'б', L'Б', WCH_NONE, L'ѫ'    , L'Ѫ'    }, {VK__none_, 0,  ',',  '<', WCH_NONE, WCH_NONE, WCH_NONE},
+	{VK_OEM_PERIOD, SGCAPS, L'ю', L'Ю', WCH_NONE, L'ѭ'    , L'Ѭ'    }, {VK__none_, 0,  '.',  '>', WCH_NONE, WCH_NONE, WCH_NONE},
 	{VK_OEM_2     , SGCAPS,  '.',  ',', WCH_NONE,  ':'    ,  ';'    }, {VK__none_, 0,  '/',  '?', WCH_NONE, WCH_NONE, WCH_NONE},
 	{VK_OEM_102   , SGCAPS, '\\',  '/', WCH_FS  , L'ꙉ'    , L'Ꙉ'    }, {VK__none_, 0, '\\',  '|', WCH_NONE, WCH_NONE, WCH_NONE},
 	{}
